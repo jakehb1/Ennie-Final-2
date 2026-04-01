@@ -471,10 +471,12 @@ const OVERALL_STATS = { sessions: 20, beatPlacebo: 14, pct: 70, threshold: 75 };
 /* ═══════════════════════════════════════════════════════════════
    SCREEN 1: Landing — Redesigned with social proof + how it works
    ═══════════════════════════════════════════════════════════════ */
-const LandingScreen = ({ onGetStarted, onJoinHealer, onLogin }) => (
+const LandingScreen = ({ onGetStarted, onJoinHealer, onLogin }) => {
+  const [showFullStory, setShowFullStory] = useState(false);
+  return (
   <div style={{ flex: 1, overflowY: "auto", background: "#FFFFFF", display: "flex", flexDirection: "column" }}>
     {/* Gradient hero */}
-    <div style={{ background: T.gradHero, minHeight: "50vh", display: "flex", flexDirection: "column", padding: "48px 24px 28px", animation: "fadeIn .8s ease" }}>
+    <div style={{ background: T.gradHero, minHeight: "44vh", display: "flex", flexDirection: "column", padding: "48px 24px 22px", animation: "fadeIn .8s ease" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "auto" }}>
         <svg width={18} height={18} viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="11" stroke="#0A0A0A" strokeWidth="1.5" opacity=".25" />
@@ -483,107 +485,245 @@ const LandingScreen = ({ onGetStarted, onJoinHealer, onLogin }) => (
         </svg>
         <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 800, letterSpacing: -0.4, color: "#0A0A0A" }}>Ennie</span>
       </div>
-      <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(46px,12vw,60px)", fontWeight: 800, lineHeight: 0.92, letterSpacing: -3, color: "#0A0A0A", marginBottom: 16 }}>
-        Energy<br />Healing.
+      <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(38px,10vw,50px)", fontWeight: 800, lineHeight: 0.94, letterSpacing: -2.5, color: "#0A0A0A", marginBottom: 10 }}>
+        Energy healing.<br />Measured.
       </h1>
-      <p style={{ fontSize: 15, color: "rgba(10,10,10,.6)", lineHeight: 1.5, maxWidth: 300, marginBottom: 20 }}>
-        Real healers. Real-time symptom tracking. Validated by UC Irvine research.
+      <p style={{ fontSize: 14, color: "rgba(10,10,10,.5)", lineHeight: 1.5, maxWidth: 310, marginBottom: 10, fontWeight: 500 }}>
+        Real healers. Measured results. No cost to try.<br />You'll know within minutes if it works.
       </p>
-    </div>
-
-    {/* Social proof strip */}
-    <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}` }}>
-      {[
-        { value: "72%", label: "report improvement" },
-        { value: "UCI", label: "research-backed" },
-        { value: "5 min", label: "per session" },
-      ].map((s, i) => (
-        <div key={i} style={{ flex: 1, textAlign: "center", padding: "14px 8px", borderRight: i < 2 ? `1px solid ${T.border}` : "none" }}>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: T.text }}>{s.value}</div>
-          <div style={{ fontSize: 10, color: T.textMuted, marginTop: 2 }}>{s.label}</div>
+      <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+        <div style={{ flex: 1, padding: "10px 8px", borderRadius: 12, background: "rgba(255,255,255,.5)", border: "1.5px solid rgba(10,10,10,.08)", textAlign: "center" }}>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: "#0A0A0A", letterSpacing: -1 }}>~3 min</div>
+          <div style={{ fontSize: 9, color: "rgba(10,10,10,.45)", fontWeight: 500 }}>free session wait</div>
         </div>
-      ))}
+        <div style={{ flex: 1, padding: "10px 8px", borderRadius: 12, background: "rgba(255,255,255,.5)", border: "1.5px solid rgba(10,10,10,.08)", textAlign: "center" }}>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: "#0A0A0A", letterSpacing: -1 }}>12 min</div>
+          <div style={{ fontSize: 9, color: "rgba(10,10,10,.45)", fontWeight: 500 }}>avg session time</div>
+        </div>
+      </div>
     </div>
 
-    {/* How it works */}
-    <div style={{ padding: "24px 24px 20px" }}>
-      <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, letterSpacing: -0.5, marginBottom: 16 }}>How it works</h2>
-      {[
-        { num: "1", icon: "🗣️", title: "Tell us your symptoms", desc: "Our AI guides you through a quick intake — tap where it hurts, rate your severity." },
-        { num: "2", icon: "✦", title: "A healer works remotely", desc: "You're matched anonymously with a tested energy healer. They work while you relax — no calls, no video." },
-        { num: "3", icon: "📊", title: "Track your results", desc: "Report changes in real-time. Your data contributes to ongoing research with UC Irvine." },
-      ].map((s, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 16, animation: `slideUp ${.3 + i * .1}s ease` }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: T.accentDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>{s.icon}</div>
+    {/* Overall stat + data teaser */}
+    <div style={{ padding: "0 24px" }}>
+      <div style={{ padding: "12px 16px", borderRadius: 14, background: T.card, border: `1px solid ${T.border}`, marginBottom: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{s.title}</div>
-            <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>{s.desc}</p>
+            <div style={{ fontSize: 11, color: T.textMuted, marginBottom: 2 }}>Verified healer success rate</div>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 28, fontWeight: 800, color: T.green, letterSpacing: -1 }}>72%</div>
+            <div style={{ fontSize: 10, color: T.textMuted }}>report meaningful improvement</div>
           </div>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: T.greenDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>📊</div>
         </div>
-      ))}
-    </div>
-
-    {/* What people experience */}
-    <div style={{ padding: "0 24px 20px" }}>
-      <div style={{ borderRadius: 16, background: `linear-gradient(135deg, ${T.accentDim}, ${T.purpleDim})`, border: `1px solid ${T.accent}20`, padding: "16px 18px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-          <div style={{ width: 28, height: 28, borderRadius: 8, background: T.blue + "20", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: T.blue }}>UCI</div>
-          <span style={{ fontSize: 11, color: T.textMuted }}>Based on research with UC Irvine</span>
-        </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          {[
-            { pct: "72%", label: "report meaningful improvement", color: T.green },
-            { pct: "3.7", label: "avg severity point drop per session", color: T.accent },
-          ].map((s, i) => (
-            <div key={i} style={{ flex: 1, textAlign: "center", padding: "10px 6px", borderRadius: 12, background: "rgba(255,255,255,0.6)" }}>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: s.color }}>{s.pct}</div>
-              <div style={{ fontSize: 10, color: T.textMuted, marginTop: 2 }}>{s.label}</div>
+        {/* Top 3 condition bars */}
+        {[
+          { label: "Migraine", pct: 79, icon: "🧠", color: T.green },
+          { label: "Arthritis", pct: 82, icon: "🦴", color: T.green },
+          { label: "Back pain", pct: 72, icon: "💪", color: T.accent },
+        ].map((c, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0", borderTop: i === 0 ? `1px solid ${T.border}` : "none", borderBottom: i < 2 ? `1px solid ${T.border}` : "none" }}>
+            <span style={{ fontSize: 11 }}>{c.icon}</span>
+            <span style={{ fontSize: 11, fontWeight: 600, flex: 1 }}>{c.label}</span>
+            <div style={{ width: 50, height: 5, borderRadius: 3, background: T.border, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${c.pct}%`, background: c.color, borderRadius: 3 }} />
             </div>
-          ))}
-        </div>
+            <span style={{ fontSize: 11, fontWeight: 800, color: c.color, minWidth: 28, textAlign: "right" }}>{c.pct}%</span>
+          </div>
+        ))}
       </div>
     </div>
-
-    {/* Important note */}
-    <div style={{ padding: "0 24px 20px" }}>
-      <div style={{ padding: "12px 14px", borderRadius: 12, background: T.surface, border: `1px solid ${T.border}` }}>
-        <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55 }}>Energy healing is complementary — not a replacement for medical care. Results vary. We're transparent about success rates so you can make an informed choice.</p>
-      </div>
-    </div>
-
-    {/* Deep data */}
-    <div style={{ padding: "0 24px 16px" }}>
+    <div style={{ padding: "6px 24px 16px" }}>
       <ResultsDataPanel compact />
     </div>
 
+    {/* Charlie's story */}
+    <div style={{ padding: "22px 24px 18px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 12 }}>
+        <div style={{ width: 52, height: 52, borderRadius: "50%", background: T.grad, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 800, color: T.bg, flexShrink: 0 }}>CG</div>
+        <div>
+          <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 800, letterSpacing: -0.5, marginBottom: 2 }}>Charlie Goldsmith</h2>
+          <p style={{ fontSize: 11, color: T.textMuted }}>Founder · Energy Healer · Researcher</p>
+        </div>
+      </div>
+
+      <p style={{ fontSize: 13, color: T.text, lineHeight: 1.65, marginBottom: 12 }}>
+        I've been healing people since I was 18. For years, nobody believed this was real — including me. So I invited scientists to test it.
+      </p>
+
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+        {[
+          { label: "TLC", sub: "TV special" },
+          { label: "UCI", sub: "IRB study" },
+          { label: "The Gift", sub: "documentary" },
+          { label: "1000+", sub: "documented cases" },
+        ].map((m, i) => (
+          <div key={i} style={{ padding: "6px 10px", borderRadius: 8, background: T.card, border: `1px solid ${T.border}`, textAlign: "center", flex: "1 1 auto", minWidth: 65 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: T.text }}>{m.label}</div>
+            <div style={{ fontSize: 8, color: T.textMuted, marginTop: 1 }}>{m.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      <button onClick={() => setShowFullStory(!showFullStory)} style={{ background: "none", border: "none", color: T.accent, fontSize: 12, fontWeight: 600, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 4 }}>
+        {showFullStory ? "Hide story ▴" : "Read the full story →"}
+      </button>
+      {showFullStory && (
+        <div style={{ marginTop: 12, animation: "slideUp .3s ease" }}>
+          <p style={{ fontSize: 13, color: T.text, lineHeight: 1.65, marginBottom: 12 }}>
+            I was tested on national television in Australia and the US, including TLC's network special. Researchers at the University of California, Irvine put my ability under an IRB-approved study. The results showed something that shouldn't be possible — but was.
+          </p>
+          <p style={{ fontSize: 13, color: T.text, lineHeight: 1.65, marginBottom: 12 }}>
+            I built Ennie because I wanted to answer a bigger question: is this ability unique to me, or can others do it too? The platform tests healers the same way I was tested — with real patients, real-time symptom tracking, and full transparency.
+          </p>
+          <p style={{ fontSize: 13, color: T.text, lineHeight: 1.65, marginBottom: 0 }}>
+            Every session on Ennie is measured. Every result is real. If a healer can't beat placebo, they don't qualify. If they can — you get access to someone with a genuine, validated ability.
+          </p>
+        </div>
+      )}
+    </div>
+
+    {/* The model — why it works */}
+    <div style={{ padding: "0 24px 18px" }}>
+      <div style={{ padding: "16px 18px", borderRadius: 16, background: T.surface, border: `1px solid ${T.border}` }}>
+        <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 800, letterSpacing: -0.3, marginBottom: 8 }}>How we find real healers</h3>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <div style={{ width: 24, height: 24, borderRadius: 7, background: T.warmDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: T.warm, flexShrink: 0 }}>1</div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 1 }}>You test the healers</div>
+              <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.45 }}>Free sessions use unverified healers. Your real-time symptom data tells us if they're genuinely effective.</p>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <div style={{ width: 24, height: 24, borderRadius: 7, background: T.accentDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: T.accent, flexShrink: 0 }}>2</div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 1 }}>We measure everything</div>
+              <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.45 }}>Every session is tracked. If a healer can't beat placebo across enough sessions, they don't qualify.</p>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <div style={{ width: 24, height: 24, borderRadius: 7, background: T.greenDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: T.green, flexShrink: 0 }}>3</div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 1 }}>You get the real ones</div>
+              <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.45 }}>Paid sessions only use verified healers — people with a proven, measured ability to help.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Your first session */}
+    <div style={{ padding: "2px 24px 14px" }}>
+      <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 800, letterSpacing: -0.5, marginBottom: 12 }}>Your first session</h2>
+      <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
+        {[
+          { label: "Tell us\nwhere it hurts", icon: "🗣️" },
+          { label: "Relax while\nthey work", icon: "✦" },
+          { label: "See what\nchanged", icon: "📊" },
+        ].map((s, i) => (
+          <div key={i} style={{ flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 14, background: T.card, border: `1px solid ${T.border}`, animation: `slideUp ${.3 + i * .08}s ease` }}>
+            <div style={{ fontSize: 20, marginBottom: 4 }}>{s.icon}</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: T.text, whiteSpace: "pre-line", lineHeight: 1.3 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 3, padding: "0 4px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 10, color: T.accent }}>✓</span>
+          <span style={{ fontSize: 11, color: T.textMuted }}>Matched with a verified specialist for your condition</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 10, color: T.accent }}>✓</span>
+          <span style={{ fontSize: 11, color: T.textMuted }}>Session when your symptoms flare up — your spot is held</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Patient testimonial + emotional trigger */}
+    <div style={{ padding: "4px 24px 14px" }}>
+      <div style={{ padding: "14px 16px", borderRadius: 16, background: `linear-gradient(135deg, ${T.accentDim}, ${T.purpleDim})`, border: `1px solid ${T.accent}15` }}>
+        <p style={{ fontSize: 16, color: T.text, lineHeight: 1.35, fontWeight: 600, marginBottom: 6 }}>
+          "12 years of migraines.<br />One session: 8 → 2."
+        </p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontSize: 11, color: T.textMuted }}>Verified patient · Migraine</span>
+          <Badge color={T.green}>−6 severity</Badge>
+        </div>
+      </div>
+      <p style={{ fontSize: 12, color: T.textMuted, textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>
+        If you're still in pain after trying everything — this is worth trying.
+      </p>
+    </div>
+
+    {/* IRB note */}
+    <div style={{ padding: "0 24px 12px" }}>
+      <p style={{ fontSize: 11, color: T.textMuted, textAlign: "center", lineHeight: 1.5 }}>
+        Studied under IRB protocols at the University of California, Irvine.<br />Energy healing is complementary — not a replacement for medical care.
+      </p>
+    </div>
+
     {/* CTAs */}
-    <div style={{ padding: "4px 24px 36px" }}>
-      <Btn onClick={onGetStarted} full style={{ marginBottom: 10, fontSize: 16 }}>Try it free — start a session</Btn>
-      <Btn onClick={onJoinHealer} variant="secondary" full style={{ marginBottom: 14 }}>Apply as a healer</Btn>
-      <button onClick={onLogin} style={{ display: "block", margin: "0 auto", background: "none", border: "none", color: T.textMuted, fontSize: 14, cursor: "pointer" }}>Already have an account? Login</button>
+    <div style={{ padding: "4px 24px 28px" }}>
+      <Btn onClick={onGetStarted} full style={{ marginBottom: 6, fontSize: 16 }}>Start your free session now</Btn>
+      <p style={{ fontSize: 10, color: T.textDim, textAlign: "center", marginBottom: 8 }}>No credit card · No signup · ~12 minutes</p>
+      <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+        <button onClick={onLogin} style={{ background: "none", border: "none", color: T.textMuted, fontSize: 13, cursor: "pointer" }}>Login</button>
+        <span style={{ color: T.border }}>·</span>
+        <button onClick={onJoinHealer} style={{ background: "none", border: "none", color: T.accent, fontSize: 13, fontWeight: 500, cursor: "pointer" }}>Apply as a healer</button>
+      </div>
     </div>
   </div>
-);
+  );
+};
 
 /* ═══════════════════════════════════════════════════════════════
    SCREEN 2: Sign Up
    ═══════════════════════════════════════════════════════════════ */
 const SignUpScreen = ({ onContinue, onBack }) => {
   const [email, setEmail] = useState("");
+  const valid = email.includes("@");
   return (
     <>
-      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Sign up</span>} />
+      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 11, color: T.textDim }}>Step 1 of 3</span>} />
       <ScreenWrap>
-        <div style={{ animation: "slideUp .4s ease", paddingTop: 20 }}>
-          <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>Create your account</h2>
-          <p style={{ fontSize: 14, color: T.textMuted, marginBottom: 28 }}>No password needed — we'll send a magic link.</p>
+        <div style={{ animation: "slideUp .4s ease", paddingTop: 16 }}>
+          <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>Let's get you started</h2>
+          <p style={{ fontSize: 14, color: T.textMuted, marginBottom: 6 }}>We'll take you straight to your first session.</p>
+          <div style={{ display: "flex", gap: 10, marginBottom: 22 }}>
+            {[
+              { label: "Free" },
+              { label: "No commitment" },
+              { label: "~2 min setup" },
+            ].map((s, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                <span style={{ fontSize: 10, color: T.accent, fontWeight: 700 }}>✓</span>
+                <span style={{ fontSize: 11, color: T.textMuted }}>{s.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Social login — fastest path first */}
+          <Btn variant="secondary" full style={{ marginBottom: 8, border: `1.5px solid ${T.border}` }} onClick={() => onContinue("apple")}><span style={{ fontSize: 18 }}></span> Continue with Apple</Btn>
+          <Btn variant="secondary" full style={{ marginBottom: 8, border: `1.5px solid ${T.border}` }} onClick={() => onContinue("google")}><span style={{ fontSize: 16 }}>G</span> Continue with Google</Btn>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "14px 0" }}>
+            <div style={{ flex: 1, height: 1, background: T.border }} />
+            <span style={{ fontSize: 11, color: T.textDim }}>or use email</span>
+            <div style={{ flex: 1, height: 1, background: T.border }} />
+          </div>
+
           <Label>EMAIL</Label>
           <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" type="email" />
-          <div style={{ height: 16 }} />
-          <Btn onClick={() => onContinue(email)} full disabled={!email.includes("@")}>Continue with magic link</Btn>
-          <Divider />
-          <Btn variant="secondary" full style={{ marginBottom: 10 }} onClick={() => onContinue("apple")}><span style={{ fontSize: 18 }}></span> Sign in with Apple</Btn>
-          <Btn variant="secondary" full onClick={() => onContinue("google")}><span style={{ fontSize: 16 }}>G</span> Sign in with Google</Btn>
+          <div style={{ height: 12 }} />
+          <Btn onClick={() => onContinue(email)} full disabled={!valid} style={valid ? { background: T.accent, color: "#fff" } : {}}>
+            {valid ? "Start my session →" : "Enter your email to continue"}
+          </Btn>
+          <p style={{ fontSize: 10, color: T.textDim, textAlign: "center", marginTop: 6 }}>No password needed — we'll email you a secure login link</p>
+
+          <div style={{ height: 20 }} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, padding: "10px 0", borderTop: `1px solid ${T.border}` }}>
+            <span style={{ fontSize: 12 }}>🔒</span>
+            <span style={{ fontSize: 10, color: T.textDim }}>We never share or sell your data · <span style={{ textDecoration: "underline", cursor: "pointer" }}>Privacy Policy</span></span>
+          </div>
         </div>
       </ScreenWrap>
     </>
@@ -594,132 +734,58 @@ const SignUpScreen = ({ onContinue, onBack }) => {
    SCREEN 2b: Patient Onboarding — What to expect
    ═══════════════════════════════════════════════════════════════ */
 const PatientOnboardScreen = ({ onContinue, onBack }) => {
-  const [step, setStep] = useState(0);
-
-  // Step 0: What is energy healing?
-  if (step === 0) return (
-    <>
-      <Header left={<BackBtn onClick={onBack} />} right={<span style={{ fontSize: 11, color: T.textDim }}>1/3</span>} />
-      <ScreenWrap>
-        <div style={{ animation: "slideUp .4s ease" }}>
-          <div style={{ textAlign: "center", padding: "16px 0 20px" }}>
-            <div style={{ width: 64, height: 64, borderRadius: 18, background: T.accentDim, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}>✦</div>
-            <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 6 }}>What is energy healing?</h2>
-            <p style={{ fontSize: 14, color: T.textMuted, lineHeight: 1.6, maxWidth: 320, margin: "0 auto" }}>A practitioner focuses their intention on your symptoms — remotely, without physical contact.</p>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
-            {[
-              { icon: "🌍", title: "It's remote", desc: "Your healer could be anywhere in the world. No video, no calls — just focused intention." },
-              { icon: "🤖", title: "AI-mediated", desc: "You never speak to the healer directly. Our AI handles all communication to keep things safe and anonymous." },
-              { icon: "📊", title: "Measured in real-time", desc: "You rate your symptoms before, during, and after. Every data point is tracked as part of research with UC Irvine." },
-              { icon: "🔬", title: "We're honest about it", desc: "Energy healing doesn't work for everyone. We show you real success rates so you can decide for yourself." },
-            ].map((item, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 14px", borderRadius: 14, background: T.card, border: `1px solid ${T.border}`, animation: `slideUp ${.3 + i * .08}s ease` }}>
-                <span style={{ fontSize: 20, marginTop: 1 }}>{item.icon}</span>
-                <div><div style={{ fontSize: 13, fontWeight: 600 }}>{item.title}</div><div style={{ fontSize: 12, color: T.textMuted, marginTop: 1, lineHeight: 1.45 }}>{item.desc}</div></div>
-              </div>
-            ))}
-          </div>
-
-          <Btn onClick={() => setStep(1)} full>What happens in a session? →</Btn>
-        </div>
-      </ScreenWrap>
-    </>
-  );
-
-  // Step 1: What a session looks like
-  if (step === 1) return (
-    <>
-      <Header left={<BackBtn onClick={() => setStep(0)} />} right={<span style={{ fontSize: 11, color: T.textDim }}>2/3</span>} />
-      <ScreenWrap>
-        <div style={{ animation: "slideUp .4s ease" }}>
-          <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>What a session looks like</h2>
-          <p style={{ fontSize: 13, color: T.textMuted, marginBottom: 20, lineHeight: 1.5 }}>The whole thing takes about 5 minutes. Here's what you'll do:</p>
-
-          <div style={{ position: "relative", paddingLeft: 28 }}>
-            <div style={{ position: "absolute", left: 12, top: 8, bottom: 8, width: 2, background: `linear-gradient(180deg, ${T.accent}, ${T.green})`, borderRadius: 1 }} />
-            {[
-              { icon: "🗣️", title: "Intake", desc: "Our AI asks about your symptoms. You mark them on a body map and rate severity.", time: "~2 min" },
-              { icon: "⏳", title: "Queue", desc: "You join the queue. We notify you when a healer is ready — start whenever your symptoms are active.", time: "varies" },
-              { icon: "✦", title: "Session", desc: "A healer works remotely while you relax. The AI checks in with you during the session — just report what you feel.", time: "~5 min" },
-              { icon: "📋", title: "Results", desc: "See your before/after comparison. We follow up at 24 hours to track lasting changes.", time: "instant" },
-            ].map((s, i) => (
-              <div key={i} style={{ position: "relative", paddingBottom: i < 3 ? 20 : 0, animation: `slideUp ${.3 + i * .1}s ease` }}>
-                <div style={{ position: "absolute", left: -22, top: 2, width: 22, height: 22, borderRadius: "50%", background: T.accentDim, border: `2px solid ${T.accent}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10 }}>{s.icon}</div>
-                <div style={{ paddingLeft: 14 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                    <span style={{ fontSize: 14, fontWeight: 600 }}>{s.title}</span>
-                    <span style={{ fontSize: 10, color: T.textDim, padding: "1px 6px", borderRadius: 6, background: T.surface, border: `1px solid ${T.border}` }}>{s.time}</span>
-                  </div>
-                  <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ height: 16 }} />
-          <Card style={{ background: T.accentDim, border: `1px solid ${T.accent}20`, textAlign: "center", padding: "12px 14px" }}>
-            <p style={{ fontSize: 12, color: T.text, lineHeight: 1.5 }}>You can use <strong>voice or text</strong> throughout. The AI does the talking — you just focus on how you feel.</p>
-          </Card>
-          <div style={{ height: 16 }} />
-          <Btn onClick={() => setStep(2)} full>What are the success rates? →</Btn>
-        </div>
-      </ScreenWrap>
-    </>
-  );
-
-  // Step 2: Success rates + expectation setting
   return (
     <>
-      <Header left={<BackBtn onClick={() => setStep(1)} />} right={<span style={{ fontSize: 11, color: T.textDim }}>3/3</span>} />
+      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 11, color: T.textDim }}>Step 2 of 3</span>} />
       <ScreenWrap>
-        <div style={{ animation: "slideUp .4s ease" }}>
-          <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>What to expect</h2>
-          <p style={{ fontSize: 13, color: T.textMuted, marginBottom: 16, lineHeight: 1.5 }}>We're transparent about results. Here's what our data shows across different conditions:</p>
+        <div style={{ animation: "slideUp .4s ease", paddingTop: 12 }}>
+          <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>What to expect</h2>
+          <p style={{ fontSize: 14, color: T.textMuted, marginBottom: 20, lineHeight: 1.5 }}>Your session is simple, private, and takes about 12 minutes.</p>
 
-          {/* Success rates by condition */}
-          <Card style={{ marginBottom: 14 }}>
-            {CONDITIONS_DATA.filter(c => c.beatPlacebo).map((c, i) => (
-              <div key={c.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: i < CONDITIONS_DATA.filter(x => x.beatPlacebo).length - 1 ? `1px solid ${T.border}` : "none" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 16 }}>{c.icon}</span>
-                  <span style={{ fontSize: 13 }}>{c.label}</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <ProgressBar value={c.pct} color={c.pct >= 75 ? T.green : T.warm} style={{ width: 50 }} />
-                  <span style={{ fontSize: 13, fontWeight: 700, color: c.pct >= 75 ? T.green : T.warm, minWidth: 32, textAlign: "right" }}>{c.pct}%</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+            {[
+              { icon: "✦", title: "It's simple", desc: "Relax while a healer focuses on your symptoms. No calls, no video — you just report how you feel.", color: T.accent },
+              { icon: "🔒", title: "It's private", desc: "Everything is anonymous. The healer never sees your name, face, or personal details.", color: T.blue },
+              { icon: "📊", title: "It's measured", desc: "You rate your symptoms before and during. You'll see exactly what changed — and so will we.", color: T.green },
+            ].map((item, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "14px 16px", borderRadius: 14, background: T.card, border: `1px solid ${item.color}15`, animation: `slideUp ${.3 + i * .08}s ease` }}>
+                <div style={{ width: 32, height: 32, borderRadius: 10, background: item.color + "15", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>{item.icon}</div>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{item.title}</div>
+                  <div style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>{item.desc}</div>
                 </div>
               </div>
             ))}
-          </Card>
+          </div>
 
-          {/* Honest disclaimer */}
-          <Card style={{ marginBottom: 14, background: T.warmDim, border: `1px solid ${T.warm}25` }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <span style={{ fontSize: 18 }}>⚠️</span>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: T.warm, marginBottom: 2 }}>It doesn't work for everyone</div>
-                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55 }}>These are real results from real patients — but they also mean some people don't respond. We encourage you to try a free session first before committing to a paid one.</p>
+          {/* Session timeline — compact */}
+          <div style={{ display: "flex", gap: 0, marginBottom: 6, borderRadius: 12, overflow: "hidden", border: `1px solid ${T.border}` }}>
+            {[
+              { label: "Tell us", sub: "~2 min", color: T.accent },
+              { label: "Heal", sub: "~12 min avg", color: T.purple },
+              { label: "Results", sub: "instant", color: T.green },
+            ].map((s, i) => (
+              <div key={i} style={{ flex: 1, textAlign: "center", padding: "10px 4px", background: s.color + "08", borderRight: i < 2 ? `1px solid ${T.border}` : "none" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: s.color }}>{s.label}</div>
+                <div style={{ fontSize: 9, color: T.textMuted, marginTop: 1 }}>{s.sub}</div>
               </div>
-            </div>
-          </Card>
+            ))}
+          </div>
+          <p style={{ fontSize: 10, color: T.textDim, textAlign: "center", marginBottom: 16, lineHeight: 1.4 }}>Sessions start at 5 min. Every time you report improvement, the clock resets — so it keeps going while it's working.</p>
 
-          {/* Why honest feedback matters */}
-          <Card style={{ marginBottom: 14 }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <span style={{ fontSize: 18 }}>💜</span>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>Your honest feedback matters</div>
-                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55 }}>During and after your session, please report exactly what you feel — whether it's better, worse, or unchanged. Accurate feedback is how we validate healers and improve the platform for everyone.</p>
-              </div>
-            </div>
-          </Card>
+          {/* Honest note — compact */}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "10px 14px", borderRadius: 12, background: T.warmDim, border: `1px solid ${T.warm}20`, marginBottom: 14 }}>
+            <span style={{ fontSize: 14, marginTop: 1 }}>⚠️</span>
+            <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>Energy healing doesn't work for everyone. We show real success rates so you can decide for yourself. Your honest feedback — good or bad — is what makes this platform work.</p>
+          </div>
 
-          {/* Deep data */}
-          <ResultsDataPanel compact />
+          {/* Feedback importance — one line */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 4px", marginBottom: 18 }}>
+            <span style={{ fontSize: 10, color: T.accent }}>✓</span>
+            <span style={{ fontSize: 11, color: T.textMuted }}>Matched with a specialist for your condition</span>
+          </div>
 
-          <Btn onClick={onContinue} full>I understand — let's go →</Btn>
+          <Btn onClick={onContinue} full>Continue →</Btn>
         </div>
       </ScreenWrap>
     </>
@@ -742,20 +808,21 @@ const AgeGateScreen = ({ onContinue, onBack }) => {
   const valid = age !== null && age >= 13 && age < 150;
   return (
     <>
-      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Verify age</span>} />
+      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 11, color: T.textDim }}>Step 3 of 3</span>} />
       <ScreenWrap>
         <div style={{ animation: "slideUp .4s ease", paddingTop: 20 }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>Date of birth</h2>
-          <p style={{ fontSize: 14, color: T.textMuted, marginBottom: 24 }}>We need this to keep everyone safe.</p>
+          <p style={{ fontSize: 14, color: T.textMuted, marginBottom: 24 }}>Required for our UCI research protocol. This is the last step before your session.</p>
           <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
             <div style={{ flex: 1 }}><Label>DAY</Label><Input value={dob.day} onChange={e => setDob({ ...dob, day: numOnly(e.target.value, 2) })} placeholder="DD" type="tel" /></div>
             <div style={{ flex: 1 }}><Label>MONTH</Label><Input value={dob.month} onChange={e => setDob({ ...dob, month: numOnly(e.target.value, 2) })} placeholder="MM" type="tel" /></div>
             <div style={{ flex: 1.5 }}><Label>YEAR</Label><Input value={dob.year} onChange={e => setDob({ ...dob, year: numOnly(e.target.value, 4) })} placeholder="YYYY" type="tel" /></div>
           </div>
           {age !== null && age < 13 && <Card style={{ background: T.dangerDim, border: `1px solid ${T.danger}30`, marginBottom: 16 }}><p style={{ fontSize: 13, color: T.danger }}>You must be at least 13 to use Ennie.</p></Card>}
-          {age !== null && age >= 13 && age < 18 && <Card style={{ background: T.warmDim, border: `1px solid ${T.warm}30`, marginBottom: 16 }}><p style={{ fontSize: 13, color: T.warm }}>You can use Ennie as a case. Healer roles require 18+.</p></Card>}
-          <div style={{ padding: "12px 14px", borderRadius: 12, background: T.blueDim, border: `1px solid ${T.blue}25`, marginBottom: 20, fontSize: 12, color: T.blue, lineHeight: 1.5 }}>ℹ️ Ennie is not a medical service. Energy healing is complementary — always consult your doctor.</div>
-          <Btn onClick={() => onContinue(age)} full disabled={!valid}>Continue</Btn>
+          {age !== null && age >= 13 && age < 18 && <Card style={{ background: T.warmDim, border: `1px solid ${T.warm}30`, marginBottom: 16 }}><p style={{ fontSize: 13, color: T.warm }}>You can use Ennie as a patient. Healer roles require 18+.</p></Card>}
+          <Btn onClick={() => onContinue(age)} full disabled={!valid} style={valid ? { background: T.accent, color: "#fff" } : {}}>
+            {valid ? "Continue to session →" : "Enter your date of birth"}
+          </Btn>
         </div>
       </ScreenWrap>
     </>
@@ -769,35 +836,50 @@ const ConsentScreen = ({ onAccept, onBack }) => {
   const [checks, setChecks] = useState({ notMedical: false, dataUse: false, followUp: false, voluntary: false, notEmergency: false });
   const allChecked = Object.values(checks).every(Boolean);
   const toggle = (k) => setChecks(c => ({ ...c, [k]: !c[k] }));
+  const selectAll = () => setChecks({ notMedical: true, dataUse: true, followUp: true, voluntary: true, notEmergency: true });
   return (
     <>
-      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Research Consent</span>} />
+      <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 11, color: T.textDim }}>Before your session</span>} />
       <ScreenWrap>
         <div style={{ animation: "slideUp .4s ease" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: T.blueDim, border: `1px solid ${T.blue}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: T.blue }}>UCI</div>
-            <div><div style={{ fontSize: 13, fontWeight: 700, color: T.blue }}>UC Irvine Research Study</div><div style={{ fontSize: 11, color: T.textMuted }}>IRB-approved protocol</div></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <div style={{ width: 36, height: 28, borderRadius: 8, background: T.blueDim, border: `1px solid ${T.blue}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: T.blue }}>UCI</div>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Research consent</div>
+              <div style={{ fontSize: 11, color: T.textMuted }}>IRB-approved · University of California, Irvine</div>
+            </div>
           </div>
-          <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 6 }}>Informed Consent</h2>
-          <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.6, marginBottom: 16 }}>Ennie is part of ongoing academic research conducted in collaboration with the University of California, Irvine.</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+          <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55, marginBottom: 14 }}>Your session is part of an ongoing academic study. Please acknowledge the following:</p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
             {[
-              { key: "notMedical", label: "Not medical treatment", desc: "I understand energy healing is complementary and experimental, not a substitute for medical care." },
-              { key: "dataUse", label: "Research data use", desc: "I agree my anonymised session data may be used for academic research overseen by UC Irvine." },
-              { key: "followUp", label: "Follow-up measurements", desc: "I may be asked for optional follow-up symptom ratings at 24 hours, 1 week, and 1 month." },
-              { key: "voluntary", label: "Voluntary participation", desc: "My participation is entirely voluntary. I can withdraw at any time without penalty." },
-              { key: "notEmergency", label: "Not a medical emergency", desc: "I confirm I'm not currently experiencing a medical emergency." },
+              { key: "notMedical", label: "Not medical treatment", desc: "Energy healing is complementary and experimental — not a substitute for medical care." },
+              { key: "dataUse", label: "Anonymous data for research", desc: "My anonymised session data may be used for academic research by UC Irvine." },
+              { key: "followUp", label: "Optional follow-ups", desc: "I may be invited for optional symptom check-ins at 24 hours, 1 week, and 1 month." },
+              { key: "voluntary", label: "Voluntary participation", desc: "I can withdraw at any time without penalty." },
+              { key: "notEmergency", label: "Not a medical emergency", desc: "I'm not currently experiencing a medical emergency." },
             ].map(item => (
-              <div key={item.key} onClick={() => toggle(item.key)} style={{ padding: "14px", borderRadius: 14, cursor: "pointer", background: checks[item.key] ? T.accentDim : T.card, border: `1px solid ${checks[item.key] ? T.accent + "40" : T.border}`, transition: "all .15s" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                  <div style={{ width: 22, height: 22, borderRadius: 7, flexShrink: 0, border: `2px solid ${checks[item.key] ? T.accent : T.border}`, background: checks[item.key] ? T.accent : "transparent", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: T.bg, transition: "all .15s" }}>{checks[item.key] ? "✓" : ""}</div>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: checks[item.key] ? T.accent : T.text }}>{item.label}</span>
+              <div key={item.key} onClick={() => toggle(item.key)} style={{ padding: "12px 14px", borderRadius: 12, cursor: "pointer", background: checks[item.key] ? T.accentDim : T.card, border: `1px solid ${checks[item.key] ? T.accent + "40" : T.border}`, transition: "all .15s" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                  <div style={{ width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1, border: `2px solid ${checks[item.key] ? T.accent : T.border}`, background: checks[item.key] ? T.accent : "transparent", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: T.bg, transition: "all .15s" }}>{checks[item.key] ? "✓" : ""}</div>
+                  <div>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: checks[item.key] ? T.accent : T.text }}>{item.label}</span>
+                    <p style={{ fontSize: 11, color: T.textMuted, lineHeight: 1.45, marginTop: 2 }}>{item.desc}</p>
+                  </div>
                 </div>
-                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55, paddingLeft: 32 }}>{item.desc}</p>
               </div>
             ))}
           </div>
-          <Btn onClick={onAccept} full disabled={!allChecked}>{allChecked ? "I Consent — Continue" : "Please acknowledge all items above"}</Btn>
+
+          {!allChecked && (
+            <button onClick={selectAll} style={{ display: "block", margin: "0 auto 14px", background: "none", border: "none", color: T.accent, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              Select all ✓
+            </button>
+          )}
+
+          <Btn onClick={onAccept} full disabled={!allChecked} style={allChecked ? { background: T.accent, color: "#fff" } : {}}>
+            {allChecked ? "Agree & start session →" : "Please acknowledge all items"}
+          </Btn>
         </div>
       </ScreenWrap>
     </>
@@ -850,7 +932,7 @@ const QueueHoldScreen = ({ onContinue, onBack }) => (
    SCREEN 4+5: Intake (AI conversation + body map)
    ═══════════════════════════════════════════════════════════════ */
 const intakeScript = [
-  { ai: "Hi there — I'm Ennie, your intake guide. I'll help us understand what you're experiencing so we can match you with the right healer.", delay: 700 },
+  { ai: "Hi — I'm Ennie, your intake guide. I'll help us understand what you're experiencing so we can match you with the right healer.", delay: 700 },
   { ai: "Are you currently experiencing any pain or discomfort right now?", delay: 1000 },
   { wait: "user", options: ["Yes, I have pain right now", "It comes and goes", "It's more emotional"] },
   { ai: "Thanks for sharing. Tap the body map to mark where you feel it — you can place as many pins as you need.", delay: 900, action: "showMap" },
@@ -863,8 +945,9 @@ const intakeScript = [
   { wait: "user", options: ["Stress makes it worse", "Rest helps", "Nothing helps", "Not sure"] },
   { ai: "Based on what you've described, this sounds like it falls under chronic pain. Does that feel right?", delay: 900, action: "showCategory" },
   { wait: "user", options: ["Yes, that's right", "Maybe more like tension", "I'm not sure"] },
-  { ai: "Got it. You're eligible for a Healer Testing Session — a test healer will work with you anonymously. It typically takes about 5 minutes.", delay: 1000 },
-  { ai: "Would you like to join the queue now?", delay: 600, action: "showQueue" },
+  { ai: "Got it. We've found a match for your condition.", delay: 800 },
+  { ai: "One thing to know about your session: it starts with a 5-minute clock. Every time you report improvement, the clock resets back to 5 minutes — so the session keeps going as long as the healing is working.", delay: 1200 },
+  { ai: "The average session runs about 12 minutes. Just report honestly what you feel and we'll take care of the rest. Ready?", delay: 900, action: "showQueue" },
 ];
 
 const IntakeScreen = ({ onJoinQueue, onPaidSession, onIneligible, pins, setPins, onBack }) => {
@@ -1087,9 +1170,9 @@ const IntakeScreen = ({ onJoinQueue, onPaidSession, onIneligible, pins, setPins,
    SCREEN 5a: No Active Symptoms
    ═══════════════════════════════════════════════════════════════ */
 const paidTiersData = [
-  { name: "Line", price: "$50", urgency: "Queue", wait: "3–4 weeks", color: T.accent, desc: "Join the queue. Approx wait 3–4 weeks.", stat: "70% of users report over 90% pain reduction and 60% total pain relief after 3 sessions.", avgImprove: "72%" },
-  { name: "Week", price: "$150", urgency: "This Week", wait: "1–7 days", color: T.blue, desc: "Scheduled session within the next 7 days.", stat: "70% of users report over 90% pain reduction and 60% total pain relief after 3 sessions.", avgImprove: "78%" },
-  { name: "Today", price: "$350", urgency: "Today", wait: "< 2 hrs", color: T.warm, desc: "Priority session matched and completed today.", stat: "70% of users report over 90% pain reduction and 60% total pain relief after 3 sessions.", avgImprove: "82%" },
+  { name: "Line", price: "$50", urgency: "Queue", wait: "3–4 weeks", color: T.accent, desc: "Join the queue. Session when you reach the front.", avgImprove: "72%" },
+  { name: "Week", price: "$150", urgency: "This Week", wait: "1–7 days", color: T.blue, desc: "Scheduled with a verified healer within 7 days.", avgImprove: "78%" },
+  { name: "Today", price: "$350", urgency: "Today", wait: "< 2 hrs", color: T.warm, desc: "Priority match. Verified healer. Session today.", avgImprove: "82%" },
 ];
 
 const IneligibleScreen = ({ onPaid, onGroup, onClose }) => (
@@ -1097,30 +1180,66 @@ const IneligibleScreen = ({ onPaid, onGroup, onClose }) => (
     <Header left={<BackBtn onClick={onClose} />} center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Session Options</span>} />
     <ScreenWrap>
       <div style={{ animation: "slideUp .4s ease" }}>
-        <div style={{ borderRadius: 20, padding: "32px 24px", background: `linear-gradient(180deg, ${T.card}, ${T.surface})`, border: `1px solid ${T.border}`, textAlign: "center", marginBottom: 20 }}>
-          <div style={{ width: 52, height: 52, borderRadius: "50%", background: T.warmDim, border: `2px solid ${T.warm}50`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", fontSize: 24 }}>🌿</div>
-          <h2 style={{ fontSize: 20, fontWeight: 800, lineHeight: 1.25, color: T.text, marginBottom: 10 }}>Healer Testing Sessions need active symptoms</h2>
-          <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.6, marginBottom: 8 }}>To reliably test our healers, we need symptoms you can rate in real time.</p>
-          <p style={{ fontSize: 13, color: T.text, lineHeight: 1.6, fontWeight: 500 }}>Please come back when your symptoms are active — we'd love to help you then.</p>
+        {/* Free session explanation */}
+        <div style={{ borderRadius: 20, padding: "28px 22px", background: `linear-gradient(180deg, ${T.card}, ${T.surface})`, border: `1px solid ${T.border}`, textAlign: "center", marginBottom: 16 }}>
+          <div style={{ width: 52, height: 52, borderRadius: "50%", background: T.warmDim, border: `2px solid ${T.warm}50`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 24 }}>🌿</div>
+          <h2 style={{ fontSize: 19, fontWeight: 800, lineHeight: 1.25, color: T.text, marginBottom: 8 }}>Free sessions need active symptoms</h2>
+          <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.6, marginBottom: 10 }}>We measure changes in real time — so we need symptoms you can rate during the session. This is how we test whether a healer is genuinely effective.</p>
+          <div style={{ padding: "10px 14px", borderRadius: 12, background: T.accentDim, border: `1px solid ${T.accent}20`, marginBottom: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <span style={{ fontSize: 16, fontWeight: 800, color: T.accent }}>~3 min</span>
+              <span style={{ fontSize: 12, color: T.textMuted }}>wait when you come back</span>
+            </div>
+          </div>
+          <p style={{ fontSize: 12, color: T.text, lineHeight: 1.5, fontWeight: 500 }}>Come back when your symptoms are active and your free session will be ready in minutes.</p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}><div style={{ flex: 1, height: 1, background: T.border }} /><span style={{ fontSize: 11, color: T.textMuted, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", whiteSpace: "nowrap" }}>Or book a Super Session</span><div style={{ flex: 1, height: 1, background: T.border }} /></div>
-        <ResultsDataPanel type="all" compact />
-        {paidTiersData.map((t, i) => (
-          <Card key={t.name} onClick={() => onPaid(t)} style={{ marginBottom: 10, cursor: "pointer", border: `1px solid ${t.color}25`, animation: `slideUp ${.3 + i * .08}s ease` }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}><span style={{ fontSize: 16, fontWeight: 700, color: t.color }}>{t.name}</span><span style={{ fontSize: 18, fontWeight: 800, color: t.color }}>{t.price}</span></div>
-            <p style={{ fontSize: 12, color: T.textMuted, marginBottom: 6 }}>{t.desc}</p>
-            {t.stat && <p style={{ fontSize: 11, color: T.accent, marginBottom: 8, padding: "6px 8px", borderRadius: 8, background: T.accentDim, lineHeight: 1.45 }}>📊 {t.stat}</p>}
-            <div style={{ display: "flex", gap: 8 }}><Badge color={t.color}>{t.urgency}</Badge><Badge color={T.textMuted}>~{t.wait}</Badge></div>
-          </Card>
-        ))}
-        <Card onClick={onGroup} style={{ cursor: "pointer", border: `1px solid ${T.purple}30`, background: `${T.purple}08`, animation: "slideUp .6s ease" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: T.purpleDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>👥</div>
-            <div style={{ flex: 1 }}><div style={{ fontSize: 16, fontWeight: 700, color: T.purple }}>Group Healing</div><div style={{ fontSize: 12, color: T.textMuted }}>From $19.99/mo · 8 sessions per month</div></div>
+
+        <Btn onClick={onClose} full style={{ marginBottom: 16 }}>Got it — I'll come back with symptoms</Btn>
+
+        {/* Paid options */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}><div style={{ flex: 1, height: 1, background: T.border }} /><span style={{ fontSize: 11, color: T.textMuted, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", whiteSpace: "nowrap" }}>Or book a paid session</span><div style={{ flex: 1, height: 1, background: T.border }} /></div>
+
+        {/* Queue option */}
+        <Card style={{ marginBottom: 10, border: `1px solid ${T.accent}20` }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Book now, use when ready</div>
+          <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5, marginBottom: 8 }}>Join the paid queue now. When you reach the front, we hold your spot — start your session whenever your symptoms are active. Your spot is held for up to 90 days.</p>
+          <div style={{ display: "flex", gap: 8 }}>
+            {paidTiersData.map((t, i) => (
+              <div key={t.name} onClick={() => onPaid(t)} style={{ flex: 1, textAlign: "center", padding: "10px 6px", borderRadius: 12, background: t.color + "08", border: `1px solid ${t.color}20`, cursor: "pointer" }}>
+                <div style={{ fontSize: 14, fontWeight: 800, color: t.color }}>{t.price}</div>
+                <div style={{ fontSize: 10, color: T.textMuted, marginTop: 2 }}>{t.urgency}</div>
+                <div style={{ fontSize: 9, color: T.textDim, marginTop: 1 }}>~{t.wait}</div>
+              </div>
+            ))}
           </div>
         </Card>
-        <div style={{ height: 8 }} />
-        <Btn variant="ghost" full onClick={onClose}>Maybe later</Btn>
+
+        {/* No symptoms ever option */}
+        <Card style={{ marginBottom: 10, border: `1px solid ${T.green}20`, background: T.greenDim }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: T.green, marginBottom: 4 }}>Don't have flare-ups?</div>
+          <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5, marginBottom: 8 }}>Paid sessions use our verified healers — people with a proven, measured ability. They work on your condition whether you're feeling symptoms right now or not. This gives you the best chance of a good result.</p>
+          <div style={{ display: "flex", gap: 6 }}>
+            {paidTiersData.map((t) => (
+              <div key={t.name} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, color: t.color }}>{t.name}</span>
+                <span style={{ fontSize: 10, color: T.green }}>{t.avgImprove}%</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Group healing */}
+        <Card onClick={onGroup} style={{ marginBottom: 10, cursor: "pointer", border: `1px solid ${T.purple}30`, background: `${T.purple}06` }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: T.purpleDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>👥</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: T.purple }}>Group Healing</div>
+              <div style={{ fontSize: 12, color: T.textMuted }}>1,000 healers · From $19.99/mo</div>
+            </div>
+          </div>
+        </Card>
+
+        <ResultsDataPanel type="all" compact />
       </div>
     </ScreenWrap>
   </>
@@ -1130,82 +1249,70 @@ const IneligibleScreen = ({ onPaid, onGroup, onClose }) => (
    SCREEN 5: Routing / SKU selection
    ═══════════════════════════════════════════════════════════════ */
 const allSkus = [
-  { name: "Healer Testing Session", price: "FREE", urgency: "Test Pool", wait: "10–20 min", color: T.accent, desc: "Matched with a test healer anonymously. Active symptoms required.", stat: "Up to 50% of our users report a 50% or more pain reduction.", free: true },
+  { name: "Free Session", price: "FREE", urgency: "Test Pool", wait: "~3 min", color: T.accent, desc: "Matched with a test healer anonymously. Your feedback helps us find the real ones.", free: true },
   ...paidTiersData,
 ];
 const RoutingScreen = ({ eligible, onFree, onPaid, onGroup, onBack }) => {
   const [showPaid, setShowPaid] = useState(false);
   return (
   <>
-    <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Your session</span>} />
+    <Header left={<BackBtn onClick={onBack} />} center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Choose your session</span>} />
     <ScreenWrap>
       <div style={{ animation: "slideUp .4s ease" }}>
-        {/* Eligibility confirmation */}
-        {eligible && (
-          <div style={{ textAlign: "center", padding: "16px 0 20px" }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.greenDim, border: `2px solid ${T.green}40`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px", fontSize: 24 }}>✅</div>
-            <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>You're eligible</h2>
-            <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.5 }}>Active symptoms detected. You can start a free healer testing session right now.</p>
-          </div>
-        )}
+        <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>You're ready</h2>
+        <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.5, marginBottom: 16 }}>Your symptoms are logged. Choose how you'd like to be matched.</p>
 
-        {/* Primary CTA — Free session */}
-        <Card style={{ marginBottom: 14, border: `2px solid ${T.accent}40`, background: T.accentDim, cursor: "pointer" }} onClick={onFree}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-            <span style={{ fontSize: 17, fontWeight: 700, color: T.accent }}>Healer Testing Session</span>
-            <span style={{ fontSize: 18, fontWeight: 800, color: T.accent }}>FREE</span>
+        {/* Primary — Free session */}
+        <Card style={{ marginBottom: 12, border: `2px solid ${T.accent}40`, background: T.accentDim, cursor: "pointer" }} onClick={onFree}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: T.accent }}>Free Session</span>
+            <span style={{ fontSize: 17, fontWeight: 800, color: T.accent }}>FREE</span>
           </div>
-          <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5, marginBottom: 8 }}>You'll be matched anonymously with a healer being tested on the platform. Your feedback helps validate their ability.</p>
+          <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5, marginBottom: 8 }}>You'll be matched with a healer being tested on the platform. Your real-time feedback helps us measure whether they're genuinely effective.</p>
           <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
-            <Badge color={T.accent}>~10–20 min wait</Badge>
-            <Badge color={T.textMuted}>~5 min session</Badge>
+            <Badge color={T.accent}>~3 min wait</Badge>
+            <Badge color={T.textMuted}>~12 min avg session</Badge>
           </div>
-          <div style={{ padding: "8px 10px", borderRadius: 10, background: "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: 11, color: T.textMuted }}>Avg. improvement</span>
-            <span style={{ fontSize: 14, fontWeight: 800, color: T.accent }}>50%</span>
+          <div style={{ padding: "6px 10px", borderRadius: 8, background: T.warmDim, border: `1px solid ${T.warm}15` }}>
+            <span style={{ fontSize: 11, color: T.warm }}>Test healers — lower success rates than verified. This is how we find the real ones.</span>
           </div>
         </Card>
 
-        {/* Data panel — compare testing vs verified */}
-        <ResultsDataPanel type="all" compact />
+        {/* Paid options — visible, not hidden */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}><div style={{ flex: 1, height: 1, background: T.border }} /><span style={{ fontSize: 10, color: T.textMuted, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase" }}>Or use a verified healer</span><div style={{ flex: 1, height: 1, background: T.border }} /></div>
 
-        {/* Secondary — Paid options */}
-        <button onClick={() => setShowPaid(!showPaid)} style={{ width: "100%", padding: "12px 14px", borderRadius: 14, border: `1px solid ${T.border}`, background: T.card, color: T.textMuted, fontSize: 13, fontWeight: 500, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: showPaid ? 12 : 0 }}>
-          <span>Want faster access or a verified healer?</span>
-          <span style={{ fontSize: 12 }}>{showPaid ? "▴" : "▾"}</span>
-        </button>
+        <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5, marginBottom: 10 }}>Verified healers have a proven track record — 75%+ success rate across enough sessions to rule out chance.</p>
 
-        {showPaid && (
-          <div style={{ animation: "slideUp .2s ease" }}>
-            <p style={{ fontSize: 12, color: T.textMuted, marginBottom: 12, lineHeight: 1.5 }}>Super Sessions use verified healers with proven track records. Shorter wait times and higher success rates.</p>
-            {paidTiersData.map((t, i) => (
-              <Card key={t.name} onClick={() => onPaid(t)} style={{ marginBottom: 8, cursor: "pointer", border: `1px solid ${t.color}25`, animation: `slideUp ${.2 + i * .06}s ease` }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: t.color }}>{t.name}</span>
-                  <span style={{ fontSize: 16, fontWeight: 800, color: t.color }}>{t.price}</span>
-                </div>
-                <p style={{ fontSize: 11, color: T.textMuted, marginBottom: 8 }}>{t.desc}</p>
-                <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
-                  <Badge color={t.color}>{t.urgency}</Badge>
-                  <Badge color={T.textMuted}>~{t.wait}</Badge>
-                </div>
-                <div style={{ padding: "6px 10px", borderRadius: 10, background: t.color + "10", border: `1px solid ${t.color}15`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 11, color: T.textMuted }}>Avg. improvement</span>
-                  <span style={{ fontSize: 14, fontWeight: 800, color: t.color }}>{t.avgImprove}</span>
-                </div>
-              </Card>
-            ))}
-            <Card onClick={onGroup} style={{ cursor: "pointer", border: `1px solid ${T.purple}30`, background: `${T.purple}08` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: T.purpleDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>👥</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: T.purple }}>Group Healing</div>
-                  <div style={{ fontSize: 11, color: T.textMuted }}>From $19.99/mo · 8 sessions/month · avg. 45% improvement</div>
-                </div>
-              </div>
-            </Card>
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+          {paidTiersData.map((t) => (
+            <div key={t.name} onClick={() => onPaid(t)} style={{ flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 14, background: T.card, border: `1px solid ${t.color}20`, cursor: "pointer" }}>
+              <div style={{ fontSize: 16, fontWeight: 800, color: t.color }}>{t.price}</div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: T.text, marginTop: 2 }}>{t.name}</div>
+              <div style={{ fontSize: 9, color: T.textMuted, marginTop: 2 }}>~{t.wait}</div>
+              <div style={{ fontSize: 10, fontWeight: 700, color: T.green, marginTop: 4 }}>{t.avgImprove}%</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Queue hold note */}
+        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 4px", marginBottom: 12 }}>
+          <span style={{ fontSize: 10, color: T.accent }}>✓</span>
+          <span style={{ fontSize: 11, color: T.textMuted }}>Paid sessions hold your spot for 90 days — use when symptoms are active</span>
+        </div>
+
+        {/* Group healing */}
+        <Card onClick={onGroup} style={{ marginBottom: 12, cursor: "pointer", border: `1px solid ${T.purple}30`, background: `${T.purple}06` }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: T.purpleDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>👥</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: T.purple }}>Group Healing</div>
+              <div style={{ fontSize: 11, color: T.textMuted }}>1,000 healers · From $19.99/mo · 62% report 70%+ reduction</div>
+            </div>
           </div>
-        )}
+        </Card>
+
+        {/* Data */}
+        <ResultsDataPanel type="all" compact />
       </div>
     </ScreenWrap>
   </>
@@ -1542,10 +1649,10 @@ const GroupSessionScreen = ({ pins, setPins, onEnd }) => {
 const QueueScreen = ({ selectedTier = "free", userCondition = "migraine", atFront = false, onReady, onGoHome, onLeave, onUpgrade }) => {
   const [sel, setSel] = React.useState(selectedTier);
   const [progress, setProgress] = React.useState(atFront ? 100 : 0);
+  const [showUpgrade, setShowUpgrade] = React.useState(false);
 
   const condition = CONDITIONS_DATA.find(c => c.id === userCondition) || CONDITIONS_DATA[1];
 
-  // Simulate queue progress (demo only) — advances to front
   React.useEffect(() => {
     if (atFront) return;
     const i = setInterval(() => setProgress(p => {
@@ -1558,14 +1665,13 @@ const QueueScreen = ({ selectedTier = "free", userCondition = "migraine", atFron
   const isAtFront = atFront || progress >= 100;
 
   const tiers = [
-    { id: "free", name: "Healer Testing Session", price: "Free", wait: "10–20 min", color: T.accent, desc: "Help us test a healer — active symptoms needed" },
-    { id: "line", name: "Super Session — Line", price: "$50", wait: "3–4 weeks", color: T.accent, desc: "Join the paid queue. Verified healer matched to your condition." },
-    { id: "week", name: "Super Session — This Week", price: "$150", wait: "1–7 days", color: T.blue, desc: "Scheduled session within the next 7 days with a verified healer." },
-    { id: "today", name: "Super Session — Today", price: "$350", wait: "< 2 hrs", color: T.warm, desc: "Priority match. Verified healer. Session completed today." },
+    { id: "free", name: "Free Session", price: "Free", wait: "~3 min", color: T.accent, desc: "Test healer — your feedback helps us find the real ones" },
+    { id: "line", name: "Line", price: "$50", wait: "3–4 weeks", color: T.accent, desc: "Verified healer matched to your condition" },
+    { id: "week", name: "This Week", price: "$150", wait: "1–7 days", color: T.blue, desc: "Verified healer within 7 days" },
+    { id: "today", name: "Today", price: "$350", wait: "< 2 hrs", color: T.warm, desc: "Priority match with a verified healer today" },
   ];
 
   const currentTier = tiers.find(t => t.id === sel) || tiers[0];
-  const successRate = condition.successByTier?.[sel] || 0;
   const isUpgrade = sel !== selectedTier && sel !== "free";
 
   return (
@@ -1574,31 +1680,30 @@ const QueueScreen = ({ selectedTier = "free", userCondition = "migraine", atFron
       <ScreenWrap>
         <div style={{ animation: "slideUp .4s ease" }}>
 
-          {/* At front — ready state */}
+          {/* At front — ready */}
           {isAtFront && (
             <Card style={{ marginBottom: 16, border: `2px solid ${T.green}50`, background: T.greenDim, animation: "slideUp .4s ease" }}>
               <div style={{ textAlign: "center", padding: "8px 0 12px" }}>
                 <div style={{ width: 56, height: 56, borderRadius: "50%", background: T.green + "25", border: `2px solid ${T.green}40`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px", fontSize: 26, animation: "breathe 2s ease-in-out infinite" }}>✦</div>
                 <h3 style={{ fontSize: 18, fontWeight: 800, color: T.green, marginBottom: 4 }}>You're at the front!</h3>
-                <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.5, marginBottom: 14 }}>Start whenever your symptoms are active. Your spot is held.</p>
+                <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.5, marginBottom: 14 }}>A healer is ready for you. Start whenever your symptoms are active.</p>
                 <Btn onClick={onReady} full style={{ background: T.green, marginBottom: 6 }}>I'm ready — start session</Btn>
-                <p style={{ fontSize: 11, color: T.textMuted }}>~15 min to connect with a healer</p>
               </div>
             </Card>
           )}
 
-          {/* Condition + selected session header */}
-          <div style={{ textAlign: "center", padding: isAtFront ? "4px 0 16px" : "16px 0 20px" }}>
+          {/* Current session info */}
+          <div style={{ textAlign: "center", padding: isAtFront ? "4px 0 14px" : "12px 0 18px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", borderRadius: 20, background: T.accentDim, border: `1px solid ${T.accent}30`, marginBottom: 14 }}>
               <span style={{ fontSize: 16 }}>{condition.icon}</span>
               <span style={{ fontSize: 13, fontWeight: 600, color: T.accent }}>{condition.label}</span>
             </div>
             {!isAtFront && (
               <>
-                <div style={{ fontSize: 10, fontWeight: 600, color: T.textDim, letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 10 }}>Your estimated wait</div>
+                <div style={{ fontSize: 10, fontWeight: 600, color: T.textDim, letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 10 }}>Estimated wait</div>
                 <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 48, fontWeight: 800, letterSpacing: -2, lineHeight: 1, color: T.text }}>{currentTier.wait}</div>
                 <div style={{ fontSize: 13, color: T.textMuted, marginTop: 8 }}>
-                  for <strong style={{ color: currentTier.color }}>{currentTier.name}</strong>
+                  <strong style={{ color: currentTier.color }}>{currentTier.name}</strong> · {currentTier.price}
                 </div>
               </>
             )}
@@ -1606,78 +1711,59 @@ const QueueScreen = ({ selectedTier = "free", userCondition = "migraine", atFron
 
           {!isAtFront && <ProgressBar value={progress} color={T.text} />}
 
-          {/* Success rate for current selection */}
-          <div style={{ textAlign: "center", padding: "16px 0 4px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 14, background: successRate >= 50 ? T.greenDim : T.warmDim, border: `1px solid ${successRate >= 50 ? T.green : T.warm}30` }}>
-              <span style={{ fontSize: 20, fontWeight: 800, color: successRate >= 50 ? T.green : T.warm }}>{successRate}%</span>
-              <span style={{ fontSize: 12, color: T.textMuted }}>success rate for {condition.label}</span>
+          {/* Tips while waiting */}
+          <Card style={{ marginTop: 16, marginBottom: 14, background: T.surface, border: `1px solid ${T.blue}20` }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 10 }}>
+              <span style={{ fontSize: 16 }}>🔔</span>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>We'll notify you</p>
+                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>When you reach the front, your spot is held. Start whenever you're ready — no rush.</p>
+              </div>
             </div>
-          </div>
+            <div style={{ height: 1, background: T.border, margin: "0 0 10px" }} />
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <span style={{ fontSize: 16 }}>⚡</span>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 600, color: T.warm, marginBottom: 2 }}>Start with active symptoms</p>
+                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>Sessions work best when you can feel your symptoms. Wait for a flare-up if possible.</p>
+              </div>
+            </div>
+          </Card>
 
-          {/* Session type selector */}
-          <div style={{ marginTop: 20, marginBottom: 16 }}>
-            <Label>Session type {isUpgrade ? "— upgrade available" : ""}</Label>
-            {tiers.map((t, i) => {
-              const isSel = sel === t.id;
-              const rate = condition.successByTier?.[t.id] || 0;
-              return (
-                <div key={t.id} onClick={() => setSel(t.id)} style={{
-                  padding: "14px 16px", borderRadius: 18, cursor: "pointer", marginBottom: 8, transition: "all .15s",
-                  border: isSel ? `2px solid ${t.color}` : `1px solid ${T.border}`,
-                  background: isSel ? `${t.color}08` : T.card,
-                  animation: `slideUp ${.25 + i * .06}s ease`,
-                }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      {isSel && <div style={{ width: 8, height: 8, borderRadius: "50%", background: t.color, flexShrink: 0 }} />}
-                      <span style={{ fontSize: 14, fontWeight: isSel ? 700 : 500, color: isSel ? t.color : T.text }}>{t.name}</span>
-                    </div>
-                    <span style={{ fontSize: 15, fontWeight: 700, color: isSel ? t.color : T.text }}>{t.price}</span>
-                  </div>
-                  <div style={{ fontSize: 12, color: T.textMuted, marginBottom: 8, paddingLeft: isSel ? 16 : 0 }}>{t.desc}</div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: isSel ? 16 : 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ fontSize: 12, color: T.textMuted }}>Est. wait:</span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: isSel ? t.color : T.text }}>{t.wait}</span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                      <span style={{ fontSize: 12, color: T.textMuted }}>Success:</span>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: rate >= 50 ? T.green : rate >= 25 ? T.warm : T.danger }}>{rate}%</span>
-                    </div>
+          {/* Upgrade option — collapsed */}
+          {sel === "free" && (
+            <>
+              <button onClick={() => setShowUpgrade(!showUpgrade)} style={{ width: "100%", padding: "10px 14px", borderRadius: 12, border: `1px solid ${T.border}`, background: T.card, color: T.textMuted, fontSize: 12, fontWeight: 500, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: showUpgrade ? 10 : 0 }}>
+                <span>Want a verified healer instead?</span>
+                <span style={{ fontSize: 11 }}>{showUpgrade ? "▴" : "▾"}</span>
+              </button>
+              {showUpgrade && (
+                <div style={{ animation: "slideUp .2s ease" }}>
+                  <p style={{ fontSize: 11, color: T.textMuted, marginBottom: 8, lineHeight: 1.5 }}>Verified healers have 75%+ proven success rates. Higher cost, significantly better results.</p>
+                  <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
+                    {tiers.filter(t => t.id !== "free").map((t) => (
+                      <div key={t.id} onClick={() => onUpgrade(paidTiersData.find(p => p.name === (t.id === "today" ? "Today" : t.id === "week" ? "Week" : "Line")) || paidTiersData[0])} style={{ flex: 1, textAlign: "center", padding: "10px 4px", borderRadius: 12, background: t.color + "08", border: `1px solid ${t.color}20`, cursor: "pointer" }}>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: t.color }}>{t.price}</div>
+                        <div style={{ fontSize: 9, color: T.textMuted, marginTop: 2 }}>{t.name}</div>
+                        <div style={{ fontSize: 9, color: T.textDim, marginTop: 1 }}>{t.wait}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              )}
+            </>
+          )}
 
-          {/* Upgrade CTA if they selected a higher tier */}
+          {/* Upgrade CTA if they selected a paid tier */}
           {isUpgrade && (
-            <div style={{ animation: "slideUp .3s ease", marginBottom: 16 }}>
+            <div style={{ animation: "slideUp .3s ease", marginBottom: 14 }}>
               <Btn onClick={() => onUpgrade(paidTiersData.find(p => p.name === (sel === "today" ? "Today" : sel === "week" ? "Week" : "Line")) || paidTiersData[0])} full style={{ background: `linear-gradient(135deg, ${currentTier.color}, ${T.purple})` }}>
                 Upgrade to {currentTier.name} — {currentTier.price}
               </Btn>
             </div>
           )}
 
-          {/* How it works info card */}
-          <Card style={{ marginBottom: 16, background: T.surface, border: `1px solid ${T.blue}20` }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: T.blueDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>🔔</div>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 600, color: T.text, marginBottom: 4 }}>We'll notify you when it's your turn</p>
-                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55 }}>Once you reach the front of the queue, you can take the session whenever you're ready. There's no rush — your spot is held.</p>
-              </div>
-            </div>
-            <div style={{ height: 1, background: T.border, margin: "0 0 12px" }} />
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: T.warmDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>⚡</div>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 600, color: T.warm, marginBottom: 4 }}>Start with active symptoms</p>
-                <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.55 }}>It is <strong style={{ color: T.text }}>strongly recommended</strong> that you only begin your session when you have active symptoms. This gives a significantly higher chance of success.</p>
-              </div>
-            </div>
-          </Card>
-
+          <div style={{ height: 8 }} />
           <Btn onClick={onGoHome} full>Go to Home →</Btn>
           <button onClick={onLeave} style={{ display: "block", margin: "14px auto 0", background: "none", border: "none", color: T.textMuted, fontSize: 13, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}>Leave queue</button>
         </div>
@@ -1859,7 +1945,7 @@ const SymptomConfirmScreen = ({ pins, setPins, onStart, onBack, onExpired }) => 
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: timerColor, animation: isWarning ? "pulse 0.6s infinite" : "pulse 1.5s infinite" }} />
                   <span style={{ fontSize: 13, fontWeight: 600, color: isWarning ? T.danger : T.text }}>
-                    {isWarning ? "Session starting soon!" : "Healer matching in progress"}
+                    {isWarning ? "Confirm now — session starting!" : "Your session is coming up"}
                   </span>
                 </div>
                 <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, color: timerColor, letterSpacing: -0.5 }}>{mins}:{String(secs).padStart(2, "0")}</span>
@@ -1993,10 +2079,17 @@ const SymptomConfirmScreen = ({ pins, setPins, onStart, onBack, onExpired }) => 
               </Card>
             )}
 
-            {/* Active symptoms reminder — only when not in warning */}
+            {/* Active symptoms + timer mechanic reminder */}
             {!isWarning && (
-              <div style={{ padding: "10px 14px", borderRadius: 12, background: T.warmDim, border: `1px solid ${T.warm}25`, marginBottom: 16 }}>
-                <p style={{ fontSize: 12, color: T.warm, lineHeight: 1.5 }}>⚡ <strong>Reminder:</strong> Starting with active symptoms gives a significantly higher chance of success.</p>
+              <div style={{ padding: "10px 14px", borderRadius: 12, background: T.surface, border: `1px solid ${T.border}`, marginBottom: 16 }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+                  <span style={{ fontSize: 12 }}>⚡</span>
+                  <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}><strong style={{ color: T.warm }}>Start with active symptoms</strong> — sessions work best when you can feel what you're reporting on.</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                  <span style={{ fontSize: 12 }}>⏱️</span>
+                  <p style={{ fontSize: 12, color: T.textMuted, lineHeight: 1.5 }}>Your session starts with a 5-min clock. Every time you report improvement, it resets — so it keeps going while it's working.</p>
+                </div>
               </div>
             )}
 
@@ -2018,8 +2111,8 @@ const SymptomConfirmScreen = ({ pins, setPins, onStart, onBack, onExpired }) => 
                   <p style={{ fontSize: 11, color: T.textDim, marginTop: 6 }}>At 3 mins out you'll have 60 seconds to confirm you're ready.</p>
                 </Card>
                 <div style={{ height: 8 }} />
-                <Btn onClick={() => onExpired?.()} variant="ghost" full small>
-                  I'm not ready — keep my spot in queue
+                <Btn onClick={onBack} variant="ghost" full small>
+                  Not ready yet — go back
                 </Btn>
               </>
             )}
@@ -2065,9 +2158,12 @@ const ConnectingScreen = ({ onConnected, isGroup, onCancel }) => {
           ))}
         </div>
         <div style={{ borderRadius: 16, padding: "20px 18px", background: `linear-gradient(180deg, ${T.card}, ${T.surface})`, border: `1px solid ${T.border}`, textAlign: "left", width: "100%" }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 8 }}>Before we begin</p>
-          <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.65, marginBottom: 10 }}>Please give accurate feedback throughout the session. It is critical to getting the most out of the session.</p>
-          <p style={{ fontSize: 13, color: T.text, lineHeight: 1.65, fontWeight: 600 }}>The truth — no matter what it is — is very important.</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 6 }}>Before we begin</p>
+          <p style={{ fontSize: 13, color: T.textMuted, lineHeight: 1.6, marginBottom: 8 }}>Report exactly what you feel — better, worse, or nothing. Honest feedback is how the system works.</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontSize: 12 }}>⏱️</span>
+            <p style={{ fontSize: 12, color: T.textMuted }}>5-min clock starts now. Reports improvement → clock resets.</p>
+          </div>
         </div>
         <button onClick={() => { setCancelled(true); onCancel?.(); }} style={{ marginTop: 16, background: "none", border: "none", color: T.textDim, fontSize: 13, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}>Cancel</button>
       </div>
@@ -2079,12 +2175,12 @@ const ConnectingScreen = ({ onConnected, isGroup, onCancel }) => {
    SCREEN 9: Live Session (Case)
    ═══════════════════════════════════════════════════════════════ */
 const sessionScript = [
-  { ai: "Your healer is connected and ready. They can see your symptom map. Take a moment to settle in.", delay: 1800 },
-  { ai: "Your healer is beginning to work with you now. Relax and notice any changes.", delay: 3500 },
-  { ai: "How are you feeling? Any changes — even subtle ones?", delay: 8000 },
-  { ai: "Your healer is adjusting their focus. Keep noticing how your body feels.", delay: 12000 },
-  { ai: "Take a slow breath. How's the area you marked earlier?", delay: 16000 },
-  { ai: "Your healer will continue for the remaining time. Update your symptoms on the body map whenever you notice a change.", delay: 20000 },
+  { ai: "Your healer is connected. They can see your symptom map. Remember: the 5-minute clock resets every time you report improvement — so keep updating honestly.", pause: 4000 },
+  { ai: "Your healer is beginning to work with you now. Relax and notice any changes.", pause: 6000 },
+  { ai: "How are you feeling? Any changes — even subtle ones?", pause: 12000 },
+  { ai: "Your healer is adjusting their focus. Keep noticing how your body feels.", pause: 15000 },
+  { ai: "Take a slow breath. How's the area you marked earlier?", pause: 15000 },
+  { ai: "Keep updating the body map or tell me how you feel. The session continues as long as there's improvement.", pause: 20000 },
 ];
 
 const LiveSessionScreen = ({ pins, setPins, baselinePins, onEnd }) => {
@@ -2106,10 +2202,13 @@ const LiveSessionScreen = ({ pins, setPins, baselinePins, onEnd }) => {
     if (i >= sessionScript.length) return;
     const s = sessionScript[i];
     if (s.ai) {
-      setTyping(true); await wait(s.delay || 2000); setTyping(false);
+      setTyping(true); await wait(1500); setTyping(false);
       setMsgs(m => [...m, { text: s.ai, isAI: true }]);
       setLastAI(s.ai); setIdx(i + 1);
-      if (sessionScript[i + 1]?.ai) setTimeout(() => run(i + 1), 300);
+      // Wait for the user to read, then queue next message
+      if (i + 1 < sessionScript.length) {
+        setTimeout(() => run(i + 1), s.pause || 10000);
+      }
     }
   }, []);
 
@@ -2131,10 +2230,16 @@ const LiveSessionScreen = ({ pins, setPins, baselinePins, onEnd }) => {
       setTimeout(async () => {
         setTyping(true); await wait(1200); setTyping(false);
         const newSev = clamp((pins[0]?.severity || 5) + delta, 0, 10);
-        const msg = improving ? `Noted — your healer can see the improvement. Symptoms updated to ${newSev}/10.` : `Thanks for letting us know. Your healer is adjusting. Symptoms updated to ${newSev}/10.`;
-        setMsgs(m => [...m, { text: msg, isAI: true }]);
-        setLastAI(msg);
-        if (improving) setTimer(t => Math.min(t + 60, 300));
+        if (improving) {
+          const msg = `Improvement noted — symptoms updated to ${newSev}/10. ⏱️ Clock reset to 5:00.`;
+          setMsgs(m => [...m, { text: msg, isAI: true }]);
+          setLastAI(msg);
+          setTimer(300);
+        } else {
+          const msg = `Thanks for letting us know. Your healer is adjusting. Symptoms updated to ${newSev}/10.`;
+          setMsgs(m => [...m, { text: msg, isAI: true }]);
+          setLastAI(msg);
+        }
       }, 400);
     }
   };
@@ -2204,6 +2309,11 @@ const LiveSessionScreen = ({ pins, setPins, baselinePins, onEnd }) => {
         <div ref={ref} />
       </div>
       <div style={{ padding: "8px 16px 12px", borderTop: `1px solid ${T.border}`, background: T.surface }}>
+        <div style={{ display: "flex", gap: 6, marginBottom: 6, overflowX: "auto" }}>
+          {["Feeling better", "No change", "Something shifted", "Getting worse"].map((q, i) => (
+            <button key={i} onClick={() => sendMessage(q)} style={{ padding: "5px 10px", borderRadius: 10, border: `1px solid ${T.accent}30`, background: T.accentDim, color: T.accent, fontSize: 10, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}>{q}</button>
+          ))}
+        </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button onClick={() => setMode("voice")} style={{ width: 42, height: 42, borderRadius: 12, border: `1px solid ${T.border}`, background: T.card, color: T.accent, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>🎙️</button>
           <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") sendMessage(text); }} placeholder="Describe how you feel…" style={{ flex: 1, padding: "11px 14px", borderRadius: 12, border: `1px solid ${T.border}`, background: T.card, color: T.text, fontSize: 13.5, outline: "none" }} />
@@ -2228,37 +2338,41 @@ const SessionEndScreen = ({ baselinePins, finalPins, onHome, onThankYou, onNoRes
   <>
     <Header center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Session Complete</span>} />
     <ScreenWrap>
-      <div style={{ textAlign: "center", marginBottom: 20, animation: "slideUp .5s ease" }}>
+      <div style={{ textAlign: "center", marginBottom: 16, animation: "slideUp .5s ease" }}>
         <div style={{ width: 56, height: 56, borderRadius: "50%", background: improved ? T.greenDim : T.warmDim, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 10px", fontSize: 24 }}>{improved ? "✨" : "🙏"}</div>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>{improved ? "Session Complete" : "Session Complete"}</h2>
-        <p style={{ fontSize: 13, color: T.textMuted }}>{improved ? "Here's how your symptoms changed" : "Let's look at your results"}</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>{improved ? "Your symptoms improved" : "Session complete"}</h2>
+        <p style={{ fontSize: 13, color: T.textMuted }}>{improved ? `A total drop of ${totalDrop} points across ${baselinePins.length} symptom${baselinePins.length > 1 ? "s" : ""}.` : "Let's look at what happened."}</p>
       </div>
-      <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+
+      {/* Before / After body maps */}
+      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
         <div style={{ flex: 1, background: T.card, borderRadius: 14, padding: 10, border: `1px solid ${T.border}` }}><div style={{ textAlign: "center", marginBottom: 6, fontSize: 10, fontWeight: 600, color: T.textMuted, letterSpacing: 1 }}>BEFORE</div><BodyMap side="front" pins={baselinePins} small /></div>
-        <div style={{ flex: 1, background: T.card, borderRadius: 14, padding: 10, border: `1px solid ${improved ? T.accent + "25" : T.warm + "25"}` }}><div style={{ textAlign: "center", marginBottom: 6, fontSize: 10, fontWeight: 600, color: improved ? T.accent : T.warm, letterSpacing: 1 }}>AFTER</div><BodyMap side="front" pins={finalPins} small /></div>
+        <div style={{ flex: 1, background: T.card, borderRadius: 14, padding: 10, border: `1px solid ${improved ? T.green + "30" : T.warm + "25"}` }}><div style={{ textAlign: "center", marginBottom: 6, fontSize: 10, fontWeight: 600, color: improved ? T.green : T.warm, letterSpacing: 1 }}>AFTER</div><BodyMap side="front" pins={finalPins} small /></div>
       </div>
+
+      {/* Symptom breakdown */}
       {baselinePins.map((bp, i) => { const fp = finalPins[i]; const diff = bp.severity - (fp?.severity || 0); return (
         <Card key={i} style={{ marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", animation: `slideUp ${.4 + i * .1}s ease` }}>
-          <div><div style={{ fontSize: 11, color: T.textMuted }}>Symptom {i + 1}</div><div style={{ fontSize: 13, marginTop: 2 }}><span style={{ color: T.danger }}>{bp.severity}</span><span style={{ color: T.textDim, margin: "0 6px" }}>→</span><span style={{ color: diff > 0 ? T.accent : T.warm }}>{fp?.severity || 0}</span></div></div>
-          <Badge color={diff > 0 ? T.accent : T.warm}>{diff > 0 ? `−${diff}` : diff === 0 ? "no change" : `+${Math.abs(diff)}`}</Badge>
+          <div><div style={{ fontSize: 11, color: T.textMuted }}>Symptom {i + 1}</div><div style={{ fontSize: 13, marginTop: 2 }}><span style={{ color: T.danger }}>{bp.severity}</span><span style={{ color: T.textDim, margin: "0 6px" }}>→</span><span style={{ color: diff > 0 ? T.green : T.warm }}>{fp?.severity || 0}</span></div></div>
+          <Badge color={diff > 0 ? T.green : diff === 0 ? T.textMuted : T.warm}>{diff > 0 ? `−${diff}` : diff === 0 ? "no change" : `+${Math.abs(diff)}`}</Badge>
         </Card>
       ); })}
 
       {improved ? (
         <>
           <div style={{ padding: "10px 12px", borderRadius: 12, background: T.greenDim, border: `1px solid ${T.green}20`, marginBottom: 12, marginTop: 8 }}>
-            <p style={{ fontSize: 12, color: T.green, lineHeight: 1.55 }}>🎉 A total drop of {totalDrop} points. This data is part of ongoing research with UCI.</p>
+            <p style={{ fontSize: 12, color: T.green, lineHeight: 1.55 }}>🎉 This data is recorded as part of the UCI research study. We'll follow up in 24 hours to see if the improvement held.</p>
           </div>
-          <Btn onClick={onThankYou} variant="accent" full>See your results & share 💚</Btn>
+          <Btn onClick={onThankYou} variant="accent" full>Share your experience →</Btn>
           <div style={{ height: 8 }} />
           <Btn onClick={onHome} variant="ghost" full>Back to home</Btn>
         </>
       ) : (
         <>
           <div style={{ padding: "10px 12px", borderRadius: 12, background: T.blueDim, border: `1px solid ${T.blue}20`, marginBottom: 12, marginTop: 8 }}>
-            <p style={{ fontSize: 12, color: T.blue, lineHeight: 1.55 }}>Results can sometimes take up to 24 hours to appear. We'll check in with you tomorrow.</p>
+            <p style={{ fontSize: 12, color: T.blue, lineHeight: 1.55 }}>Some people notice changes within 24 hours after a session. We'll check in with you tomorrow to see how you're feeling.</p>
           </div>
-          <Btn onClick={onNoResult} full>Talk to us about your experience</Btn>
+          <Btn onClick={onNoResult} full>We want to understand — tell us more</Btn>
           <div style={{ height: 8 }} />
           <Btn onClick={onHome} variant="ghost" full>Back to home — wait for follow-up</Btn>
         </>
@@ -2347,101 +2461,73 @@ const ShareScreen = ({ baselinePins = [], finalPins = [], userCondition = "migra
 
   const sevColor = (s) => s <= 2 ? T.green : s <= 5 ? T.warm : T.danger;
 
-  // ── CELEBRATE PHASE ──
-  if (phase === "celebrate") {
-    return (
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "28px 24px", textAlign: "center", background: T.bg, position: "relative", overflow: "hidden" }}>
-        {/* Fireworks */}
-        {showFireworks && (
-          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1 }}>
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div key={i} style={{
-                position: "absolute",
-                left: `${10 + Math.random() * 80}%`,
-                top: `${5 + Math.random() * 60}%`,
-                width: i % 3 === 0 ? 8 : 6,
-                height: i % 3 === 0 ? 8 : 6,
-                borderRadius: "50%",
-                background: [T.accent, T.warm, T.purple, T.green, T.pink, "#FFD700"][i % 6],
-                animation: `firework${i % 3} ${1.5 + Math.random() * 2}s ease-out ${Math.random() * 1.5}s infinite`,
-                opacity: 0,
-              }} />
-            ))}
-            <style>{`
-              @keyframes firework0 { 0% { transform:translateY(0) scale(0); opacity:1 } 50% { opacity:1 } 100% { transform:translateY(-80px) scale(1.5); opacity:0 } }
-              @keyframes firework1 { 0% { transform:translate(0,0) scale(0); opacity:1 } 50% { opacity:1 } 100% { transform:translate(30px,-60px) scale(1.3); opacity:0 } }
-              @keyframes firework2 { 0% { transform:translate(0,0) scale(0); opacity:1 } 50% { opacity:1 } 100% { transform:translate(-25px,-70px) scale(1.4); opacity:0 } }
-            `}</style>
-          </div>
-        )}
-
-        <div style={{ position: "relative", zIndex: 2 }}>
-          <div style={{ fontSize: 72, marginBottom: 16, animation: "breathe 1.5s ease-in-out infinite" }}>🎉</div>
-          <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 32, fontWeight: 800, letterSpacing: -1.5, marginBottom: 8, background: `linear-gradient(135deg, ${T.accent}, ${T.purple})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Amazing result!
-          </h1>
-          <p style={{ fontSize: 18, color: T.text, fontWeight: 700, marginBottom: 4 }}>
-            {pctDrop}% reduction
-          </p>
-          <p style={{ fontSize: 15, color: T.textMuted, marginBottom: 28 }}>
-            {condition.label}: {beforeSev}/10 → {afterSev}/10
-          </p>
-          <Btn onClick={() => setPhase("recap")} full>See your session recap →</Btn>
-        </div>
-      </div>
-    );
-  }
-
-  // ── RECAP PHASE ──
-  if (phase === "recap") {
+  // ── CELEBRATE + RECAP COMBINED ──
+  if (phase === "celebrate" || phase === "recap") {
     return (
       <>
-        <Header center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Session Recap</span>} />
+        <Header center={<span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500 }}>Your Results</span>} />
         <ScreenWrap>
-          <div style={{ animation: "slideUp .4s ease" }}>
-            {/* Big result */}
-            <Card style={{ marginBottom: 16, background: `linear-gradient(135deg, ${T.accentDim}, ${T.purpleDim})`, border: `1px solid ${T.accent}25`, textAlign: "center", padding: "24px 18px" }}>
-              <div style={{ fontSize: 42, marginBottom: 8 }}>🎉</div>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: -1.5, color: T.accent }}>{pctDrop}%</div>
-              <p style={{ fontSize: 14, color: T.textMuted, marginTop: 4 }}>pain reduction in one session</p>
-            </Card>
+          <div style={{ animation: "slideUp .5s ease" }}>
+            {/* Big result hero */}
+            <div style={{ textAlign: "center", padding: "16px 0 20px", position: "relative", overflow: "hidden" }}>
+              {/* Fireworks */}
+              {showFireworks && (
+                <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1 }}>
+                  {Array.from({ length: 16 }).map((_, i) => (
+                    <div key={i} style={{
+                      position: "absolute",
+                      left: `${10 + Math.random() * 80}%`,
+                      top: `${5 + Math.random() * 60}%`,
+                      width: i % 3 === 0 ? 7 : 5,
+                      height: i % 3 === 0 ? 7 : 5,
+                      borderRadius: "50%",
+                      background: [T.accent, T.warm, T.purple, T.green, T.pink, "#FFD700"][i % 6],
+                      animation: `firework${i % 3} ${1.5 + Math.random() * 2}s ease-out ${Math.random() * 1.5}s infinite`,
+                      opacity: 0,
+                    }} />
+                  ))}
+                  <style>{`
+                    @keyframes firework0 { 0% { transform:translateY(0) scale(0); opacity:1 } 50% { opacity:1 } 100% { transform:translateY(-80px) scale(1.5); opacity:0 } }
+                    @keyframes firework1 { 0% { transform:translate(0,0) scale(0); opacity:1 } 50% { opacity:1 } 100% { transform:translate(30px,-60px) scale(1.3); opacity:0 } }
+                    @keyframes firework2 { 0% { transform:translate(0,0) scale(0); opacity:1 } 50% { opacity:1 } 100% { transform:translate(-25px,-70px) scale(1.4); opacity:0 } }
+                  `}</style>
+                </div>
+              )}
+              <div style={{ position: "relative", zIndex: 2 }}>
+                <div style={{ fontSize: 48, marginBottom: 8 }}>🎉</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 40, fontWeight: 800, letterSpacing: -2, background: `linear-gradient(135deg, ${T.accent}, ${T.purple})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{pctDrop}%</div>
+                <p style={{ fontSize: 14, color: T.textMuted, marginTop: 4 }}>reduction in one session</p>
+                <p style={{ fontSize: 16, fontWeight: 700, color: T.text, marginTop: 6 }}>{condition.label}: {beforeSev}/10 → {afterSev}/10</p>
+              </div>
+            </div>
 
             {/* Journey timeline */}
-            <Label>YOUR SESSION JOURNEY</Label>
-            <div style={{ position: "relative", paddingLeft: 24, marginBottom: 20 }}>
-              {/* Timeline line */}
+            <Label>YOUR SESSION</Label>
+            <div style={{ position: "relative", paddingLeft: 24, marginBottom: 16 }}>
               <div style={{ position: "absolute", left: 10, top: 8, bottom: 8, width: 2, background: `linear-gradient(180deg, ${T.danger}, ${T.warm}, ${T.green})`, borderRadius: 1 }} />
-
               {recapSteps.map((step, i) => (
-                <div key={i} style={{ position: "relative", paddingBottom: i < recapSteps.length - 1 ? 20 : 0, animation: `slideUp ${.3 + i * .12}s ease` }}>
-                  {/* Dot */}
+                <div key={i} style={{ position: "relative", paddingBottom: i < recapSteps.length - 1 ? 16 : 0, animation: `slideUp ${.3 + i * .12}s ease` }}>
                   <div style={{ position: "absolute", left: -20, top: 2, width: 22, height: 22, borderRadius: "50%", background: T.card, border: `2px solid ${sevColor(step.severity)}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10 }}>{step.icon}</div>
-
                   <div style={{ paddingLeft: 12 }}>
-                    <div style={{ fontSize: 11, fontWeight: 600, color: T.textDim, letterSpacing: 0.5, textTransform: "uppercase", marginBottom: 3 }}>{step.label}</div>
-                    <div style={{ padding: "8px 12px", borderRadius: 12, background: T.card, border: `1px solid ${T.border}`, marginBottom: 4 }}>
-                      <p style={{ fontSize: 13, color: T.text, fontStyle: "italic", lineHeight: 1.45 }}>{step.quote}</p>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <div style={{ width: 40, height: 6, borderRadius: 3, background: T.border, overflow: "hidden" }}>
-                        <div style={{ height: "100%", width: `${(step.severity / 10) * 100}%`, background: sevColor(step.severity), borderRadius: 3 }} />
-                      </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: T.textDim, textTransform: "uppercase", letterSpacing: 0.5 }}>{step.label}</span>
                       <span style={{ fontSize: 12, fontWeight: 700, color: sevColor(step.severity) }}>{step.severity}/10</span>
                     </div>
+                    <p style={{ fontSize: 12, color: T.text, fontStyle: "italic" }}>{step.quote}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Before/After body maps */}
-            <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+            <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
               <div style={{ flex: 1, background: T.card, borderRadius: 14, padding: 10, border: `1px solid ${T.border}` }}><div style={{ textAlign: "center", marginBottom: 6, fontSize: 10, fontWeight: 600, color: T.textMuted, letterSpacing: 1 }}>BEFORE</div><BodyMap side="front" pins={baselinePins} small /></div>
               <div style={{ flex: 1, background: T.card, borderRadius: 14, padding: 10, border: `1px solid ${T.green}25` }}><div style={{ textAlign: "center", marginBottom: 6, fontSize: 10, fontWeight: 600, color: T.green, letterSpacing: 1 }}>AFTER</div><BodyMap side="front" pins={finalPins} small /></div>
             </div>
 
-            <Btn onClick={() => setPhase("share")} full>Share this recap</Btn>
+            <Btn onClick={() => setPhase("share")} full>Share your experience →</Btn>
             <div style={{ height: 8 }} />
-            <Btn onClick={() => setPhase("interviewOffer")} variant="secondary" full>Continue →</Btn>
+            <Btn onClick={onDone} variant="ghost" full>Back to home</Btn>
           </div>
         </ScreenWrap>
       </>
@@ -2733,7 +2819,7 @@ const FollowUpScreen = ({ onPositive, onNeutral, pins, setPins }) => {
           <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
             {[{ label: "100% better", icon: "✅", v: "accent", fn: "pos" }, { label: "It didn't help", icon: "✕", v: "secondary", fn: "neut" }].map(r => <Btn key={r.label} variant={r.v} small onClick={r.fn === "pos" ? onPositive : onNeutral} style={{ flex: 1 }}>{r.icon} {r.label}</Btn>)}
           </div>
-          <Btn onClick={onPositive} full>Submit check-in</Btn>
+          <Btn onClick={onPositive} full>Submit check-in →</Btn>
         </div>
       </ScreenWrap>
     </>
@@ -2801,8 +2887,8 @@ const NoResultScreen = ({ baselinePins = [], finalPins = [], userCondition = "mi
       { ai: "Absolutely. Multiple sessions often produce better results — in fact, most of our strongest outcomes come after 2–3 sessions.", delay: 1000 },
       { ai: `For ${condition.label.toLowerCase()}, patients who did 3+ sessions saw an average pain drop of ${condition.avgDrop.toFixed(1)} points per session.`, delay: 1000 },
       { ai: wasPaid
-        ? "You can book another Super Session from the home screen, or try a free Healer Testing Session to work with a different healer."
-        : "You can start another free Healer Testing Session anytime from the home screen — different healers may work differently for you.", delay: 1000 },
+        ? "You can book another paid session from the home screen, or try a free session to work with a different healer."
+        : "You can start another free session anytime from the home screen — different healers may work differently for you.", delay: 1000 },
       { ai: "We'd love for you to try again. 💜", delay: 600, action: "resolve" },
     ],
     "I want a refund": [
@@ -2978,7 +3064,7 @@ const HealerOnboardScreen = ({ onComplete, onBack }) => {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20, textAlign: "left" }}>
             {[
-              { icon: "🤖", title: "AI-mediated", desc: "You never speak to the patient directly. Our AI handles all communication." },
+              { icon: "🔒", title: "Private & anonymous", desc: "You never speak to the patient directly. Our AI handles all communication." },
               { icon: "🔬", title: "Research-backed", desc: "Sessions are part of ongoing research with UC Irvine. Your results matter." },
               { icon: "📊", title: "Outcomes-measured", desc: "Patient symptoms are tracked before, during, and after every session." },
               { icon: "🌍", title: "Anonymous & remote", desc: "Both sides are anonymous. You heal from wherever you are." },
@@ -3144,7 +3230,7 @@ const HealerOnboardScreen = ({ onComplete, onBack }) => {
 
           <div style={{ height: 20 }} />
           <Card style={{ background: T.accentDim, border: `1px solid ${T.accent}20`, textAlign: "center", padding: "14px 16px" }}>
-            <p style={{ fontSize: 13, color: T.text, lineHeight: 1.5 }}>Each session is about <strong>5 minutes</strong>. You can do as many or as few as you want in a sitting.</p>
+            <p style={{ fontSize: 13, color: T.text, lineHeight: 1.5 }}>Sessions start with a <strong>5-minute clock</strong>. Every time the patient reports improvement, the clock resets to 5 minutes. Average session: ~12 minutes.</p>
           </Card>
           <div style={{ height: 16 }} />
           <Btn onClick={() => setStep(3)} full>Got it — how am I evaluated? →</Btn>
@@ -5693,7 +5779,6 @@ export default function EnnieApp() {
       { id: "patientOnboard", num: "2b", label: "Patient Onboarding", star: true },
       { id: "ageGate", num: 3, label: "Age Gate" },
       { id: "consent", num: "3a", label: "UCI Research Consent" },
-      { id: "queueHold", num: "3c", label: "Queue Hold Explainer" },
       { id: "intake", num: 4, label: "Intake — AI + Body Map", star: true },
       { id: "ineligible", num: "5a", label: "No Active Symptoms" },
       { id: "routing", num: 5, label: "Eligibility & SKUs" },
@@ -5784,7 +5869,6 @@ export default function EnnieApp() {
       case "patientOnboard": return <PatientOnboardScreen onContinue={() => go("ageGate")} onBack={() => go("signup")} />;
       case "ageGate": return <AgeGateScreen onContinue={(a) => { setAge(a); if (role === "healer") go("healerOnboard"); else go("consent"); }} onBack={() => go("patientOnboard")} />;
       case "consent": return <ConsentScreen onAccept={() => go("intake")} onBack={() => go("ageGate")} />;
-      case "queueHold": return <QueueHoldScreen onContinue={() => go("tiers")} onBack={() => go("caseHome")} />;
       case "intake": return <IntakeScreen pins={pins} setPins={setPins} onJoinQueue={() => go("routing")} onPaidSession={() => go("routing")} onIneligible={() => go("ineligible")} onBack={() => go("consent")} />;
       case "ineligible": return <IneligibleScreen onPaid={(t) => { setSelectedTier(t); go("payment"); }} onGroup={() => go("groupSchedule")} onClose={() => go("caseHome")} />;
       case "routing": return <RoutingScreen eligible={true} onFree={startFreeSession} onPaid={(t) => { setSelectedTier(t); go("payment"); }} onGroup={() => go("groupSchedule")} onBack={() => go("intake")} />;
@@ -5880,8 +5964,8 @@ export default function EnnieApp() {
                       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                         <div style={{ width: 52, height: 52, borderRadius: "50%", background: T.accent + "25", border: `2px solid ${T.accent}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>✦</div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 16, fontWeight: 700, color: T.accent }}>Start a session</div>
-                          <div style={{ fontSize: 12, color: T.textMuted, marginTop: 2 }}>Free healer testing · ~5 minutes</div>
+                          <div style={{ fontSize: 16, fontWeight: 700, color: T.accent }}>Start a free session</div>
+                          <div style={{ fontSize: 12, color: T.textMuted, marginTop: 2 }}>~3 min wait · ~12 min avg session</div>
                         </div>
                         <span style={{ color: T.accent, fontSize: 20 }}>→</span>
                       </div>
@@ -5921,9 +6005,6 @@ export default function EnnieApp() {
                     </div>
                   </Card>
 
-                  {/* Research data */}
-                  <ResultsDataPanel compact />
-
                   {/* Recent sessions — compact */}
                   <Label>RECENT SESSIONS</Label>
                   {sessionHistory.slice(0, 3).map((s, i) => (
@@ -5945,7 +6026,7 @@ export default function EnnieApp() {
                   <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
                     <Card style={{ flex: 1, cursor: "pointer", textAlign: "center", padding: "14px 8px" }} onClick={() => go("tiers")}>
                       <div style={{ fontSize: 22, marginBottom: 4 }}>⭐</div>
-                      <div style={{ fontSize: 12, fontWeight: 600 }}>Super Session</div>
+                      <div style={{ fontSize: 12, fontWeight: 600 }}>Paid Session</div>
                       <div style={{ fontSize: 10, color: T.textMuted }}>Verified healers</div>
                     </Card>
                     <Card style={{ flex: 1, cursor: "pointer", textAlign: "center", padding: "14px 8px" }} onClick={() => go("groupSchedule")}>
@@ -5960,97 +6041,67 @@ export default function EnnieApp() {
                     </Card>
                   </div>
 
+                  {/* Research data */}
+                  <ResultsDataPanel compact />
+
                   <Divider />
 
                   {/* Testimonial Ad Dashboard */}
                   <Label>YOUR TESTIMONIALS</Label>
                   <Card style={{ marginBottom: 12, border: `1px solid ${T.accent}25`, background: `${T.accent}04` }}>
                     {/* Active ad */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-                      <div style={{ width: 48, height: 48, borderRadius: 12, background: `linear-gradient(135deg, ${T.accentDim}, ${T.purpleDim})`, border: `1px solid ${T.accent}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>🎥</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                      <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(135deg, ${T.accentDim}, ${T.purpleDim})`, border: `1px solid ${T.accent}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>🎥</div>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-                          <span style={{ fontSize: 14, fontWeight: 700 }}>Migraine testimonial</span>
+                          <span style={{ fontSize: 13, fontWeight: 700 }}>Migraine testimonial</span>
                           <Badge color={T.green}>Live</Badge>
                         </div>
-                        <div style={{ fontSize: 11, color: T.textMuted }}>Recorded Mar 20 · Running on Meta & YouTube</div>
+                        <div style={{ fontSize: 10, color: T.textMuted }}>Running on Meta & YouTube</div>
                       </div>
                     </div>
 
                     {/* Performance stats */}
-                    <div style={{ display: "flex", gap: 0, padding: "10px 0", borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-                      <div style={{ flex: 1, textAlign: "center", borderRight: `1px solid ${T.border}` }}>
-                        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: T.accent }}>12.4K</div>
-                        <div style={{ fontSize: 9, color: T.textMuted }}>Views</div>
-                      </div>
-                      <div style={{ flex: 1, textAlign: "center", borderRight: `1px solid ${T.border}` }}>
-                        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: T.blue }}>847</div>
-                        <div style={{ fontSize: 9, color: T.textMuted }}>Clicks</div>
-                      </div>
-                      <div style={{ flex: 1, textAlign: "center", borderRight: `1px solid ${T.border}` }}>
-                        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: T.purple }}>63</div>
-                        <div style={{ fontSize: 9, color: T.textMuted }}>Sign-ups</div>
-                      </div>
-                      <div style={{ flex: 1, textAlign: "center" }}>
-                        <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: T.green }}>$189</div>
-                        <div style={{ fontSize: 9, color: T.textMuted }}>Earned</div>
-                      </div>
+                    <div style={{ display: "flex", gap: 0, padding: "8px 0", borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
+                      {[
+                        { value: "12.4K", label: "Views", color: T.accent },
+                        { value: "847", label: "Clicks", color: T.blue },
+                        { value: "63", label: "Sign-ups", color: T.purple },
+                        { value: "$189", label: "Earned", color: T.green },
+                      ].map((s, i) => (
+                        <div key={i} style={{ flex: 1, textAlign: "center", borderRight: i < 3 ? `1px solid ${T.border}` : "none" }}>
+                          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 800, color: s.color }}>{s.value}</div>
+                          <div style={{ fontSize: 8, color: T.textMuted }}>{s.label}</div>
+                        </div>
+                      ))}
                     </div>
 
-                    {/* Earnings breakdown */}
-                    <div style={{ padding: "10px 0 0" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span style={{ fontSize: 12, color: T.textMuted }}>Session credit balance</span>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: T.green }}>$189.00</span>
-                      </div>
-                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span style={{ fontSize: 12, color: T.textMuted }}>Used so far</span>
-                        <span style={{ fontSize: 12 }}>$50.00 (1 Super Session)</span>
-                      </div>
-                      <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <span style={{ fontSize: 12, color: T.textMuted }}>Remaining</span>
-                        <span style={{ fontSize: 12, fontWeight: 600, color: T.accent }}>$139.00</span>
-                      </div>
+                    {/* Credit balance */}
+                    <div style={{ padding: "8px 0 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 12, color: T.textMuted }}>Session credit</span>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: T.green }}>$139.00 remaining</span>
                     </div>
                   </Card>
 
-                  {/* Free month from recording */}
+                  {/* Free month */}
                   <Card style={{ marginBottom: 12, background: T.greenDim, border: `1px solid ${T.green}25` }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ fontSize: 18 }}>🎁</span>
+                      <span style={{ fontSize: 16 }}>🎁</span>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: T.green }}>Free Group Healing month</div>
-                        <div style={{ fontSize: 11, color: T.textMuted }}>3 of 8 sessions used · Expires April 20</div>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: T.green }}>Free Group Healing month</div>
+                        <div style={{ fontSize: 10, color: T.textMuted }}>3 of 8 sessions used · Expires April 20</div>
                       </div>
                       <Badge color={T.green}>Active</Badge>
                     </div>
                   </Card>
 
-                  {/* Weekly performance chart */}
-                  <Card style={{ marginBottom: 12, padding: "14px 16px" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                      <span style={{ fontSize: 13, fontWeight: 600 }}>Weekly ad performance</span>
-                      <Badge color={T.accent}>↑ Growing</Badge>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 40 }}>
-                      {[8, 12, 15, 22, 31, 42, 58].map((v, i) => (
-                        <div key={i} style={{ flex: 1, height: `${(v / 60) * 100}%`, background: `linear-gradient(180deg, ${T.accent}90, ${T.accent}30)`, borderRadius: 3, minHeight: 3 }} />
-                      ))}
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
-                      <span style={{ fontSize: 9, color: T.textDim }}>4 weeks ago</span>
-                      <span style={{ fontSize: 9, color: T.textDim }}>This week</span>
-                    </div>
-                    <p style={{ fontSize: 10, color: T.textMuted, marginTop: 6 }}>58 sign-ups from your ad this week — your best week yet</p>
-                  </Card>
-
                   {/* Record another */}
                   <Card style={{ marginBottom: 12, cursor: "pointer", border: `1px solid ${T.purple}25` }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <div style={{ width: 40, height: 40, borderRadius: 10, background: T.purpleDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>➕</div>
+                      <div style={{ width: 36, height: 36, borderRadius: 10, background: T.purpleDim, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>➕</div>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600 }}>Record another testimonial</div>
-                        <div style={{ fontSize: 11, color: T.textMuted }}>Had a great session recently? A new video could earn even more.</div>
+                        <div style={{ fontSize: 12, fontWeight: 600 }}>Record another testimonial</div>
+                        <div style={{ fontSize: 10, color: T.textMuted }}>A new video could earn even more.</div>
                       </div>
                       <span style={{ color: T.purple, fontSize: 14 }}>→</span>
                     </div>
